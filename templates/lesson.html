@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{lesson.title}}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 style="text-align:center">{{ lesson.title }}</h1>
+
+    <div class="row">
+        {% for el in lists %}
+
+        <div style="display: flex; justify-content: center;">
+            <div class="btn-group">
+
+                <a href="/lessons/{{ lesson.id }}/{{ el.id }}">
+                    <input type="submit" class='btn alert alert-info' value="{{el.date}}"
+                           style="border-radius: 10px 0px 0px 10px"/>
+                </a>
+
+                <a class="btn alert alert-danger" href="/lessons/{{ lesson.id }}/del/{{ el.id }}"
+                   style="border-radius: 0px 10px 10px 0px">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </a>
+
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+    <form method="POST" style="display: flex; justify-content: center">
+        <input type="submit" class='btn alert alert-primary' value="Добавить"/>
+    </form>
+</div>
+{% endblock %}

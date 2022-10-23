@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+Список студентов
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>{{list_one.date}}</h1>
+    <div style="text-align:center;">
+
+        <img style="width:250px; margin: 50px" src="{{ qrcode(qr) }}">
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Студент</th>
+            <th>Группа</th>
+            <th>Время сканирования</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{student.student}}</td>
+            <td>{{student.groupp}}</td>
+            <td>{{student.date}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+    <!--    {% for student in students %}-->
+    <!--    <div style="display: flex; justify-content: center;">-->
+    <!--        <div style="margin: 4px" class="col col-auto">-->
+    <!--            <p><b>{{student.date}} {{student.first_name}} {{student.last_name}}</b></p>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--    {% endfor %}-->
+
+
+</div>
+{% endblock %}
