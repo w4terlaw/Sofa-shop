@@ -37,6 +37,7 @@ connect_db = create_connection('localhost', 'root', 'root', 'sofa_shop')
 # Show lesson on page
 @app.route('/', methods=['GET', 'POST'])
 def home():
+
     print(session)
     if session.get('logged_in'):
         session_login = session['logged_in']
