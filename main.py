@@ -37,13 +37,16 @@ connect_db = create_connection('localhost', 'root', 'root', 'sofa_shop')
 # Show lesson on page
 @app.route('/', methods=['GET', 'POST'])
 def home():
-
+    check_sql = f'''SELECT picture, product.title, product.price, color_id
+    FROM product, product_has_color where count>0 and product_has_color.product_id = product.id group by product.title'''
+    products = execute_read_query(connect_db, check_sql)
+    print(products)
     print(session)
     if session.get('logged_in'):
         session_login = session['logged_in']
-        return render_template('home.html', sess_login=session_login)
+        return render_template('home.html', products=products,sess_login=session_login)
     print("Сессия завершена")
-    return render_template('home.html')
+    return render_template('home.html', products=products)
 
 
 # Registration
