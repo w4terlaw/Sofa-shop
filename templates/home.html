@@ -91,6 +91,7 @@
         padding: 0.32rem 0.7rem;
     }
 
+
 </style>
 
 <div class="container">
@@ -99,25 +100,32 @@
     <div class="row">
         {%for product in products%}
         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-lg-six mb-4">
+<!--            <a href="/product/{{product.id}}">-->
             <figure class="card card-product-grid h-100">
                 <div class="img-wrap rounded bg-gray-light">
-<!--                        <span class="topbar">-->
-<!--                            <span class="badge tag-discount">-20%</span>-->
-<!--                        </span>-->
+<!--                    <span class="topbar">-->
+<!--                        <span class="badge tag-discount">-20%</span>-->
+<!--                    </span>-->
                     <span class="overlay"></span>
+                    <a href="/product/{{product.id}}">
                     <img class="mix-blend-mode"
                          src="{{product.picture}}"
                          alt=" ">
+                        </a>
                 </div>
                 <figcaption class="card-product-info">
-                    <a href="" class="title">{{product.title}}</a>
+                    <a href="/product/{{product.id}}" class="title">{{product.title}}</a>
                     <div class="price-wrap">
                         <span class="price">{{product.price}} ₽</span>
 <!--                        <del class="discount-price">$23.95</del>-->
                     </div>
-                    <button class="btn btn-sm btn-outline-danger w-100 mt-2">Приобрести</button>
+                    <a href="/product/{{product.id}}">
+                        <button class="btn btn-sm btn-outline-danger w-100 mt-2">Приобрести</button>
+                    </a>
+
                 </figcaption>
             </figure>
+<!--                </a>-->
         </div>
         {%endfor%}
     </div>
