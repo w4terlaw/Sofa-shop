@@ -9,7 +9,7 @@ from db_CRUT import execute_read_query, execute_query
 app = Flask(__name__)
 
 app.secret_key = 'super secret key'
-app.permanent_session_lifetime = datetime.timedelta(seconds=60)
+app.permanent_session_lifetime = datetime.timedelta(seconds=20)
 mysql = MySQL(app)
 
 
@@ -35,20 +35,6 @@ connect_db = create_connection('localhost', 'root', 'root', 'sofa_shop')
 
 
 # Show lesson on page
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    check_sql = f'''SELECT id, picture, product.title, product.price, color_id
-    FROM product, product_has_color where count>0 and product_has_color.product_id = product.id group by product.title'''
-    products = execute_read_query(connect_db, check_sql)
-    print(session)
-    if session.get('logged_in'):
-        session_login = session['logged_in']
-        return render_template('home.html', products=products, sess_login=session_login)
-    print("Сессия завершена")
-    return render_template('home.html', products=products)
-
-
-# Registration
 @app.route('/reg', methods=['GET', 'POST'])
 def reg():
     msg = ''
@@ -81,7 +67,7 @@ def reg():
     return render_template('registration.html', msg=msg)
 
 
-# Login
+# Registration
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
@@ -115,18 +101,33 @@ def login():
     return render_template('login.html', msg=msg)
 
 
+# Login
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    check_sql = f'''SELECT id, picture, product.title, product.price, color_id
+    FROM product, product_has_color where count>0 and product_has_color.product_id = product.id group by product.title'''
+    products = execute_read_query(connect_db, check_sql)
+    print(session)
+    # if session.get('logged_in'):
+    #     session_login = session['logged_in']
+    #     return render_template('home.html', products=products, sess_login=session['logged_in'])
+    print("Сессия завершена")
+    return render_template('home.html', products=products, sess_login=session.get('logged_in'))
+
+
 @app.route("/product/<int:id>", methods=['GET', 'POST'])
 def product(id):
-    check_sql = f'''select * from product, color, product_has_color, product_has_material, material 
-    where product.count>0 
+    check_sql = f'''select * from type, product, color, product_has_color, product_has_material, material
+    where product.count>0
+    and type.id=product.type_id
     and product.id=product_has_color.product_id 
     and color.id=product_has_color.color_id 
     and product.id=product_has_material.product_id
     and material.id=product_has_material.material_id 
-    and product.id={id} group by title '''
-    product_data = execute_read_query(connect_db, check_sql)
+    and product.id={id} group by product.title'''
+    product_data = execute_read_query(connect_db, check_sql)[0]
     print(product_data)
-    return 'product page'
+    return render_template('product.html', pro_item=product_data, sess_login=session.get('logged_in'))
 
 #
 # # Create lesson
