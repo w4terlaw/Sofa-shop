@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+Корзина
+{% endblock %}
+
+{% block body %}
+<script>
+        function get_len() {
+            $.ajax({
+                type: "POST",
+                url: "/test_add",
+                data: $('form').serialize(),
+                success: function(response) {
+                    var json = jQuery.parseJSON(response)
+                    $('#len').html(json.msg)
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+    <form action="/get_len" method="post" name="form">
+        <label for="name">Введите текст:</label>
+        <input id="name" name="name" type="text">
+        <input type="button" value="Отправить" onclick="get_len();">
+    </form>
+    <div id="len">ТУТ </div>
+
+
+    <form method="post" id="todo-form">
+        <input type="text" name="todo" id="todo">
+        <button type="submit">submit</button>
+    </form>
+
+
+    <script type="text/javascript">
+        $(document).on('submit','#todo-form',function(e)
+                       {
+          e.preventDefault();
+          $.ajax({
+            type:'POST',
+            url:'/test',
+            data:{
+              todo:$("#todo").val()
+            },
+            success:function()
+            {
+              alert('Всё гуд');
+            }
+          })
+        });
+
+</script>
+<!--<h1>{{msg}}</h1>-->
+{% endblock %}

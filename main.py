@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, json
 from flask_mysqldb import MySQL, MySQLdb
 import re
 import datetime
@@ -70,6 +70,11 @@ def reg():
 # Registration
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.referrer != 'http://127.0.0.1:5000/login':
+        session['request'] = request.referrer
+
+    print(session.get('request'))
+    print(session)
     msg = ''
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
@@ -77,7 +82,7 @@ def login():
 
         check_sql = f'''select * from user where email = "{email}"'''
         login_user = execute_read_query(connect_db, check_sql)
-        print(login_user)
+        # print(login_user)
         if login_user == tuple():
             msg = 'Неверный никнейм или пароль.'
         else:
@@ -95,10 +100,13 @@ def login():
                 session['last_name'] = login_user['last_name']
                 session['nickname'] = login_user['email']
                 session['id'] = login_user['id']
+                print(f"ревест внутри {session.get('request')}")
+                if session['request'] != None:
+                    return redirect(session.get('request'))
                 return redirect(url_for('home'))
             else:
                 msg = 'Неверный никнейм или пароль.'
-    return render_template('login.html', msg=msg)
+    return render_template('login.html', msg=msg, sess_login=session.get('logged_in'))
 
 
 # Login
@@ -117,6 +125,7 @@ def home():
 
 @app.route("/product/<int:id>", methods=['GET', 'POST'])
 def product(id):
+    msg = ''
     check_sql = f'''select * from type, product, color, product_has_color, product_has_material, material
     where product.count>0
     and type.id=product.type_id
@@ -126,8 +135,10 @@ def product(id):
     and material.id=product_has_material.material_id 
     and product.id={id} group by product.title'''
     product_data = execute_read_query(connect_db, check_sql)[0]
-    print(product_data)
+    # print(product_data)
+
     return render_template('product.html', pro_item=product_data, sess_login=session.get('logged_in'))
+
 
 #
 # # Create lesson
@@ -212,11 +223,27 @@ def product(id):
 #
 #     return redirect(url_for('check_lessons'))
 #
-#
+
 @app.route("/exit")
-def exit():
+def exit_account():
     session.clear()
-    return redirect(url_for('home'))
+    session['request'] = request.referrer
+    return redirect(session.get('request'))
+
+
+@app.route('/test_add', methods=['GET', 'POST'])
+def add_to_cart():
+    name = request.form['name']
+    return json.dumps({'msg': name})
+
+
+@app.route("/test", methods=["GET", "POST"])
+def cart():
+    if request.method == "POST":
+        msg = request.form.get("todo")
+        print(msg)
+        return jsonify({'msg': msg})
+    return render_template('test.html')
 
 
 #
