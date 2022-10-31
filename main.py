@@ -70,11 +70,17 @@ def reg():
 # Registration
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.referrer != 'http://127.0.0.1:5000/login':
+    # print(request.url_root + 'login')
+    if (request.referrer != request.url_root + 'login') and (request.referrer != request.url_root + 'reg'):
         session['request'] = request.referrer
+        print(session['request'])
+        print(request.referrer)
+    # if session.get['refferer_back'] == None:
+    #     session['refferer_back'] = True
+    # if session['refferer_back']:
+    #     session['request'] = request.referrer
 
     print(session.get('request'))
-    print(session)
     msg = ''
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
         email = request.form['email']
@@ -232,18 +238,23 @@ def exit_account():
 
 
 @app.route('/test_add', methods=['GET', 'POST'])
-def add_to_cart():
+def add_to_test():
     name = request.form['name']
     return json.dumps({'msg': name})
 
 
 @app.route("/test", methods=["GET", "POST"])
-def cart():
+def test():
     if request.method == "POST":
         msg = request.form.get("todo")
         print(msg)
         return jsonify({'msg': msg})
     return render_template('test.html')
+
+
+@app.route("/cart")
+def cart():
+    return 'hello'
 
 
 #
