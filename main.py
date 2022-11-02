@@ -9,7 +9,7 @@ from db_CRUT import execute_read_query, execute_query
 app = Flask(__name__)
 
 app.secret_key = 'super secret key'
-app.permanent_session_lifetime = datetime.timedelta(seconds=20)
+app.permanent_session_lifetime = datetime.timedelta(seconds=60)
 mysql = MySQL(app)
 
 
@@ -88,7 +88,7 @@ def login():
 
         check_sql = f'''select * from user where email = "{email}"'''
         login_user = execute_read_query(connect_db, check_sql)
-        # print(login_user)
+        print(login_user)
         if login_user == tuple():
             msg = 'Неверный никнейм или пароль.'
         else:
@@ -107,7 +107,7 @@ def login():
                 session['nickname'] = login_user['email']
                 session['id'] = login_user['id']
                 print(f"ревест внутри {session.get('request')}")
-                if session['request'] != None:
+                if session.get('request') != None:
                     return redirect(session.get('request'))
                 return redirect(url_for('home'))
             else:
@@ -119,7 +119,8 @@ def login():
 @app.route('/', methods=['GET', 'POST'])
 def home():
     check_sql = f'''SELECT id, picture, product.title, product.price, color_id
-    FROM product, product_has_color where count>0 and product_has_color.product_id = product.id group by product.title'''
+                FROM product, product_has_color where count>0 
+                and product_has_color.product_id = product.id group by product.title'''
     products = execute_read_query(connect_db, check_sql)
     print(session)
     # if session.get('logged_in'):
@@ -131,19 +132,36 @@ def home():
 
 @app.route("/product/<int:id>", methods=['GET', 'POST'])
 def product(id):
+    session['product_id'] = id
     msg = ''
-    check_sql = f'''select * from type, product, color, product_has_color, product_has_material, material
-    where product.count>0
-    and type.id=product.type_id
-    and product.id=product_has_color.product_id 
-    and color.id=product_has_color.color_id 
-    and product.id=product_has_material.product_id
-    and material.id=product_has_material.material_id 
-    and product.id={id} group by product.title'''
+    check_sql = f'''Select * from type, product, color, product_has_color, product_has_material, material
+                Where product.count>0
+                and type.id=product.type_id
+                and product.id=product_has_color.product_id 
+                and color.id=product_has_color.color_id 
+                and product.id=product_has_material.product_id
+                and material.id=product_has_material.material_id 
+                and product.id={id} group by product.title'''
     product_data = execute_read_query(connect_db, check_sql)[0]
     # print(product_data)
+    check_sql2 = f'''Select color.id, picture from type, product, color, product_has_color
+                Where product.id=product_has_color.product_id 
+                and color.id=product_has_color.color_id
+                and product.id={id}'''
+    product_picture = execute_read_query(connect_db, check_sql2)
+    # try:
+    if session.get('logged_in'):
+        try:
+            if request.method == 'POST':
+                write_sql = f'''INSERT INTO `sofa_shop`.`order` (`idUser`, `datetime`) 
+                               VALUES ('{session.get('id')}', curdate())'''
+                execute_query(connect_db, write_sql)
+                msg = 'Товар добавлен в корзину'
+        except:
+            msg = 'Возникли неполадки на сервере, повторите позже'
 
-    return render_template('product.html', pro_item=product_data, sess_login=session.get('logged_in'))
+    return render_template('product.html', pro_item=product_data, pro_pic=product_picture,
+                           sess_login=session.get('logged_in'), msg=msg)
 
 
 #
@@ -237,10 +255,17 @@ def exit_account():
     return redirect(session.get('request'))
 
 
-@app.route('/test_add', methods=['GET', 'POST'])
-def add_to_test():
-    name = request.form['name']
+@app.route('/add_to_cart', methods=['GET', 'POST'])
+def add_to_cart():
+    # name = request.form['name']
+    name = 'Привет даунич'
     return json.dumps({'msg': name})
+
+
+# @app.route('/test_add', methods=['GET', 'POST'])
+# def add_to_test():
+#     name = request.form['name']
+#     return json.dumps({'msg': name})
 
 
 @app.route("/test", methods=["GET", "POST"])
@@ -254,7 +279,7 @@ def test():
 
 @app.route("/cart")
 def cart():
-    return 'hello'
+    return render_template('cart.html')
 
 
 #

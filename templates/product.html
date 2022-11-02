@@ -32,17 +32,13 @@
     object-fit: cover;
     width: 80%;
     height: 50%;
-    margin: -20% 0 -10% 0;
+<!--    margin: -20% 0 -10% 0;-->
 }
 
 .product-list{
     display:flex;
     align-items:center
 }
-
-
-
-
 
 
 </style>
@@ -78,11 +74,30 @@
                 <div class="product-list">
                     <div style="z-index:-10" class="img-wrap">
                         <!--                        style="margin:0 20px 0 0; width: 400px; object-position: center center;"-->
-                        <img class="rounded-3" src="{{pro_item.picture}}" alt=" ">
+                        <img class="border rounded-3" src="{{pro_item.picture}}" alt=" ">
                     </div>
                     <div class="product-box">
+
                         <div class="title is-2">{{pro_item.title}}</div>
                         <p class="title is-3 has-text-muted">{{pro_item.price}} ₽ </p>
+                        <!--                        $("select").imagepicker()-->
+                        <!--                        <select class="image-picker show-html">-->
+                        <div style="display:flex; align-items: center; justify-content:center">
+                            {%for item_pic in pro_pic %}
+                            <div style="display: flex; width:105px; height:105px; align-items: center; justify-content:center"
+                                 class="border rounded-3">
+                                <img style="width:100px; margin:-10%" src="{{item_pic.picture}}" alt=" ">
+                            </div>
+
+                            <!--                            <option-->
+                            <!--                                    data-img-src='http://www.example.com/image.jpg'-->
+                            <!--                                    value='42'-->
+                            <!--                            >-->
+                            <!--                            <option data-img-src="{{item_pic.picture}}" value="{{item_pic.id}}">{{item_pic.id}}</option>-->
+                            {%endfor%}
+                        </div>
+                        <!--                        </select>-->
+                        <br>
                         <p class="">
                             <a style="text-decoration: none; color: black" href="#">
                                 <i class="fa fa-minus cart-icon"></i>
@@ -96,14 +111,33 @@
                             &nbsp; &nbsp; &nbsp;
                         <p><i class="bi bi-cart"></i></p>
                         {%if sess_login == true %}
-                        <button type="button" class="btn btn-danger w-100">В корзину</button>
+                        <button type="button" class="btn btn-danger w-100" onclick="get_len();">В корзину</button>
+                        <p id="text_info" style="text-align: center" class="mt-3"></p>
                         {%else%}
                         <button disabled type="button" title="Требуется вход" class="btn btn-danger w-100">В корзину
                         </button>
                         <p style="text-align: center" class="mt-3">Требуется вход в аккаунт</p>
                         {%endif%}
-                    </div>
+                        <script>
+                        function get_len() {
+                            $.ajax({
+                                type: "POST",
+                                url: "/add_to_cart",
+                                data: $('form').serialize(),
+                                success: function(response) {
+                                    var json = jQuery.parseJSON(response)
+                                    $('#text_info').html(json.msg)
+                                    console.log(response);
+                                },
+                                error: function(error) {
+                                    console.log(error);
+                                }
+                            });
+                        }
 
+
+                        </script>
+                    </div>
                 </div>
             </div>
             <div style="" class="column is-5 is-offset-1">
@@ -164,71 +198,7 @@
                     <li><a>Shipping Calculator</a></li>
                 </ul>
             </div>
-            <!--            <div class="box">-->
-            <!--                <p>-->
-            <!--                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ligula magna, tempus sed nisi in,-->
-            <!--                    convallis porttitor quam. Quisque auctor nisl metus, quis rhoncus mi molestie non. Phasellus ornare-->
-            <!--                    nisi et lobortis lacinia. Mauris quis dolor vulputate, malesuada lacus at, gravida ipsum. Nam a-->
-            <!--                    viverra mi. Aenean at consequat libero, in porta diam. In id ipsum nec purus mattis blandit quis sed-->
-            <!--                    nisi. Suspendisse nulla tellus, viverra eu urna ut, mollis pulvinar sem. Pellentesque habitant morbi-->
-            <!--                    tristique senectus et netus et malesuada fames ac turpis egestas. Proin non magna sagittis,-->
-            <!--                    facilisis augue sed, ultricies felis. Mauris at neque sed nisl mollis aliquet. Etiam lacinia auctor-->
-            <!--                    dolor, sed condimentum odio efficitur a.-->
-            <!--                </p><br>-->
-            <!--                <p>-->
-
-            <!--                    Sed at risus enim. Nunc aliquet tellus a purus blandit lobortis. Duis condimentum sapien sed orci-->
-            <!--                    ornare mollis. Praesent eleifend ante magna, quis commodo risus pellentesque in. Donec eget porta-->
-            <!--                    leo. Sed vel dictum est. Ut dui lorem, volutpat vel risus in, dictum euismod ex. Aenean laoreet-->
-            <!--                    dapibus nulla, nec viverra massa feugiat vitae. Vestibulum elementum nec nisi dictum rhoncus. Nam-->
-            <!--                    placerat mi eu tortor tincidunt commodo. Duis posuere, sapien a laoreet dapibus, elit tortor laoreet-->
-            <!--                    est, eget dapibus dui justo vitae ipsum. Praesent sed augue nec leo hendrerit iaculis sit amet-->
-            <!--                    efficitur ante. Nunc ac maximus mauris. Sed luctus erat id elit tempor, a aliquam lacus sodales.-->
-            <!--                </p><br>-->
-            <!--                <p>-->
-
-            <!--                    Suspendisse sodales metus justo, ullamcorper iaculis purus interdum in. Sed ultricies enim felis, in-->
-            <!--                    interdum urna malesuada a. Morbi id ligula vel leo elementum dignissim quis vel purus. Donec-->
-            <!--                    iaculis, est ac maximus vestibulum, sapien mi lacinia urna, at laoreet felis lectus nec urna. Fusce-->
-            <!--                    egestas, neque vitae blandit scelerisque, leo arcu pellentesque risus, et volutpat neque nunc id-->
-            <!--                    massa. Aenean dapibus leo vel purus malesuada, eu ultrices nulla consequat. Duis erat orci, lobortis-->
-            <!--                    sed dictum id, pretium a nibh. Mauris pharetra ligula consequat gravida ornare.-->
-            <!--                </p><br>-->
-            <!--                <p>-->
-
-            <!--                    Sed a gravida sapien. Nam malesuada feugiat nunc, eu varius risus suscipit non. Nulla vitae odio-->
-            <!--                    fermentum, varius ligula et, iaculis enim. Mauris tempor in dolor non aliquet. Pellentesque ac-->
-            <!--                    mauris a augue tempus pharetra. Nulla facilisi. Vivamus sit amet lacus sagittis, ullamcorper nisi-->
-            <!--                    sit amet, consequat eros. Sed faucibus nulla vitae erat tristique ornare.-->
-            <!--                </p><br>-->
-            <!--                <p>-->
-
-            <!--                    Nullam sit amet magna ipsum. In tincidunt tincidunt tellus. Duis maximus vulputate elit sit amet-->
-            <!--                    auctor. Vestibulum a nunc consectetur, accumsan arcu eu, dapibus est. Class aptent taciti sociosqu-->
-            <!--                    ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vitae massa eget nulla gravida-->
-            <!--                    porta eu et sem. Sed in lorem id lectus auctor lobortis sed vel libero. Nam dapibus risus eu sodales-->
-            <!--                    consectetur. Fusce luctus sollicitudin ante et sodales. Curabitur eget justo turpis. Vestibulum vel-->
-            <!--                    nunc tellus. Morbi accumsan urna nibh, at malesuada odio faucibus accumsan.-->
-            <!--                </p>-->
-
-            <!--            </div>-->
         </div>
     </div>
-    <!--    <footer class="footer">-->
-    <!--        <div class="container">-->
-    <!--            <div class="content has-text-centered">-->
-    <!--                <p>-->
-    <!--                    <strong>Bulma</strong> by <a href="http://jgthms.com">Jeremy Thomas</a>. The source code is licensed-->
-    <!--                    <a href="https://opensource.org/licenses/mit-license.php">MIT</a>. The website content-->
-    <!--                    is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.-->
-    <!--                </p>-->
-    <!--                <p>-->
-    <!--                    <a class="icon" href="https://github.com/jgthms/bulma">-->
-    <!--                        <i class="fa fa-github"></i>-->
-    <!--                    </a>-->
-    <!--                </p>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </footer>-->
 </div>
 {% endblock %}
