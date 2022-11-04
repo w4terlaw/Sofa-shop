@@ -41,15 +41,22 @@
 }
 
 
-</style>
 
+
+</style>
+<script>
+    if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+    }
+
+</script>
 <div class="container w-75">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <div class="section product-header">
         <div class="columns">
             <div class="column">
                 <a style="text-decoration:none" href="/">
-                    <button type="button" class="btn btn-sm btn-light" onclick="history.back();">
+                    <button type="button" class="btn btn-sm btn-light">
                         <!--                <a style="text-decoration: none" href="/">-->
                         <!--                    <button type="button" class="btn btn-sm btn-light">-->
                         <span style="display: flex; align-items:center;" class="menu-icon">
@@ -110,33 +117,46 @@
                             </a>
                             &nbsp; &nbsp; &nbsp;
                         <p><i class="bi bi-cart"></i></p>
+
                         {%if sess_login == true %}
-                        <button type="button" class="btn btn-danger w-100" onclick="get_len();">В корзину</button>
-                        <p id="text_info" style="text-align: center" class="mt-3"></p>
+                        <div>
+                            {% if product_in_order == True %}
+                            <button type="button" title="Требуется вход" class="btn btn-secondary w-100">Перейти в корзину
+                            </button>
+                            <p style="text-align: center" class="border rounded-3 mt-3">{{msg}}</p>
+
+                            {%else%}
+                            <form method="POST">
+                                <button type="submit" class="btn btn-danger w-100">В корзину</button>
+                            </form>
+                            <p id="text_info" style="text-align: center" class="mt-3">{{msg}}</p>
+                            {%endif%}
+
                         {%else%}
                         <button disabled type="button" title="Требуется вход" class="btn btn-danger w-100">В корзину
                         </button>
                         <p style="text-align: center" class="mt-3">Требуется вход в аккаунт</p>
+
                         {%endif%}
-                        <script>
-                        function get_len() {
-                            $.ajax({
-                                type: "POST",
-                                url: "/add_to_cart",
-                                data: $('form').serialize(),
-                                success: function(response) {
-                                    var json = jQuery.parseJSON(response)
-                                    $('#text_info').html(json.msg)
-                                    console.log(response);
-                                },
-                                error: function(error) {
-                                    console.log(error);
-                                }
-                            });
-                        }
+                        <!--                        <script>-->
+                        <!--                        function get_len() {-->
+                        <!--                            $.ajax({-->
+                        <!--                                type: "POST",-->
+                        <!--                                url: "/add_to_cart",-->
+                        <!--                                data: $('form').serialize(),-->
+                        <!--                                success: function(response) {-->
+                        <!--                                    var json = jQuery.parseJSON(response)-->
+                        <!--                                    $('#text_info').html(json.msg)-->
+                        <!--                                    console.log(response);-->
+                        <!--                                },-->
+                        <!--                                error: function(error) {-->
+                        <!--                                    console.log(error);-->
+                        <!--                                }-->
+                        <!--                            });-->
+                        <!--                        }-->
 
 
-                        </script>
+                        <!--                        </script>-->
                     </div>
                 </div>
             </div>

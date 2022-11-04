@@ -4,7 +4,7 @@ import re
 import datetime
 from passlib.hash import sha256_crypt
 
-from db_CRUT import execute_read_query, execute_query
+from db_CRUD import execute_read_query, execute_query
 
 app = Flask(__name__)
 
@@ -105,7 +105,7 @@ def login():
                 session['first_name'] = login_user['first_name']
                 session['last_name'] = login_user['last_name']
                 session['nickname'] = login_user['email']
-                session['id'] = login_user['id']
+                session['user_id'] = login_user['id']
                 print(f"ревест внутри {session.get('request')}")
                 if session.get('request') != None:
                     return redirect(session.get('request'))
@@ -132,9 +132,10 @@ def home():
 
 @app.route("/product/<int:id>", methods=['GET', 'POST'])
 def product(id):
+    product_in_order = None
     session['product_id'] = id
     msg = ''
-    check_sql = f'''Select * from type, product, color, product_has_color, product_has_material, material
+    check_info_product = f'''Select * from type, product, color, product_has_color, product_has_material, material
                 Where product.count>0
                 and type.id=product.type_id
                 and product.id=product_has_color.product_id 
@@ -142,26 +143,58 @@ def product(id):
                 and product.id=product_has_material.product_id
                 and material.id=product_has_material.material_id 
                 and product.id={id} group by product.title'''
-    product_data = execute_read_query(connect_db, check_sql)[0]
+    product_data = execute_read_query(connect_db, check_info_product)[0]
     # print(product_data)
-    check_sql2 = f'''Select color.id, picture from type, product, color, product_has_color
+    check_picture_product = f'''Select color.id, picture from type, product, color, product_has_color
                 Where product.id=product_has_color.product_id 
                 and color.id=product_has_color.color_id
                 and product.id={id}'''
-    product_picture = execute_read_query(connect_db, check_sql2)
-    # try:
+    product_picture = execute_read_query(connect_db, check_picture_product)
     if session.get('logged_in'):
-        try:
-            if request.method == 'POST':
-                write_sql = f'''INSERT INTO `sofa_shop`.`order` (`idUser`, `datetime`) 
-                               VALUES ('{session.get('id')}', curdate())'''
-                execute_query(connect_db, write_sql)
-                msg = 'Товар добавлен в корзину'
-        except:
-            msg = 'Возникли неполадки на сервере, повторите позже'
+        check_actual_order = f'''SELECT id, actual FROM sofa_shop.order 
+                                                    where idUser = {session.get('user_id')} and actual = 1'''
+        actual_order = execute_read_query(connect_db, check_actual_order)
+        if actual_order != tuple():  # ORDER СУЩЕВСТВУЕТ
 
+            actual_order = actual_order[0]
+            id_actual_order = actual_order['id']
+            check_product_in_order = f'''select * from order_product where idOrder = {id_actual_order}
+                                                                                     and idProduct = {id}'''
+            product_add_order = execute_read_query(connect_db, check_product_in_order)
+            if product_add_order != tuple():
+                product_in_order = True
+                msg = 'Товар добавлен в корзину'
+        if request.method == 'POST':
+            if actual_order == tuple():  # ORDER НЕ СУЩЕВСТВУЕТ
+
+                print('Order неактуален')
+                create_order = f'''INSERT INTO `sofa_shop`.`order` (`idUser`, `datetime`, `actual`)
+                               VALUES ('{session.get('user_id')}', curdate(), 1)'''
+                id_actual_order = execute_query(connect_db, create_order)
+                print(f"{id_actual_order} Order создан")
+            check_product_in_order = f'''select * from order_product where idOrder = {id_actual_order}
+                                                                     and idProduct = {id}'''
+            product_add_order = execute_read_query(connect_db, check_product_in_order)
+            if product_add_order == tuple():
+                insert_product = f'''INSERT INTO `sofa_shop`.`order_product` (`idOrder`, `idProduct`, `count`, `color_id`)
+                                VALUES ('{id_actual_order}', '{id}', '1', '1');'''
+                execute_query(connect_db, insert_product)
+                product_in_order = True
+                msg = 'Товар добавлен в корзину'
+
+        # if product_add_order != tuple():
+        #     msg = 'Товар в корзине'
+
+        # msg = 'Товар добавлен в корзину'
+        # print(msg)
+        # try:
+        #     pass
+        # except:
+        #     pass
+        #     msg = 'Возникли неполадки на сервере, повторите позже'
+        print(product_in_order)
     return render_template('product.html', pro_item=product_data, pro_pic=product_picture,
-                           sess_login=session.get('logged_in'), msg=msg)
+                           sess_login=session.get('logged_in'), msg=msg, product_in_order=product_in_order)
 
 
 #

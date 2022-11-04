@@ -8,13 +8,19 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://kit.fontawesome.com/f5d4fd731c.js" crossorigin="anonymous"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+<!--    <script src="https://kit.fontawesome.com/f5d4fd731c.js" crossorigin="anonymous"></script>-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
 </head>
-<!--<body style="background-image: linear-gradient(135deg, rgb(254,255,255) 0%,rgb(221,241,249) 35%,rgb(160,216,239) 100%);background-size: 1000%; ">-->
-<body>
 
+<!--<body style="background-image: linear-gradient(135deg, rgb(254,255,255) 0%,rgb(221,241,249) 35%,rgb(160,216,239) 100%);background-size: 1000%; ">-->
+<style>
+    a {
+    text-decoration: none
+    }
+</style>
+<body>
 <header style="position: sticky; top: 0; z-index:1" class="p-3 bg-dark mb-4 text-white">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -52,6 +58,8 @@
                 <a href="/exit">
                     <button type="button" class="btn btn-warning">Выйти</button>
                 </a>
+
+
             </div>
             {%else%}
             <div class="text-end">
@@ -78,5 +86,6 @@
         <p class="text-center text-muted">© 2022 Company, Inc</p>
     </footer>
 </div>
+
 </body>
 </html>
