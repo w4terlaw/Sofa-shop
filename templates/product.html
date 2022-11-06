@@ -87,23 +87,27 @@
 
                         <div class="title is-2">{{pro_item.title}}</div>
                         <p class="title is-3 has-text-muted">{{pro_item.price}} ₽ </p>
+                        <p class="title is-3 has-text-muted">Цвет: {{pro_item.color}}</p>
+
                         <!--                        $("select").imagepicker()-->
                         <!--                        <select class="image-picker show-html">-->
-                        <div style="display:flex; align-items: center; justify-content:center">
+                        <div style="display:flex; margin-left: -5px">
                             {%for item_pic in pro_pic %}
-                            <div style="display: flex; width:105px; height:105px; align-items: center; justify-content:center"
-                                 class="border rounded-3">
-                                <img style="width:100px; margin:-10%" src="{{item_pic.picture}}" alt=" ">
-                            </div>
-
-                            <!--                            <option-->
-                            <!--                                    data-img-src='http://www.example.com/image.jpg'-->
-                            <!--                                    value='42'-->
-                            <!--                            >-->
-                            <!--                            <option data-img-src="{{item_pic.picture}}" value="{{item_pic.id}}">{{item_pic.id}}</option>-->
+                            <a href="/product/{{item_pic.id}}/{{item_pic.color_id}}">
+                                {% if item_pic.color_id == color_id %}
+                                <div style="border: 2px solid #6699FF !important; margin: 0 5px 0 5px; display: flex; width:105px; height:80px; align-items: center; justify-content:center"
+                                     class="border rounded-3">
+                                    <img style="z-index: -1; width:100px; margin:-10%" src="{{item_pic.picture}}" alt=" ">
+                                </div>
+                                {%else%}
+                                <div style="display: flex; margin: 0 5px 0 5px; width:105px; height:80px; align-items: center; justify-content:center"
+                                     class="border rounded-3">
+                                    <img style="z-index: -1; width:100px; margin:-10%" src="{{item_pic.picture}}" alt=" ">
+                                </div>
+                                {%endif%}
+                            </a>
                             {%endfor%}
                         </div>
-                        <!--                        </select>-->
                         <br>
                         <p class="">
                             <a style="text-decoration: none; color: black" href="#">

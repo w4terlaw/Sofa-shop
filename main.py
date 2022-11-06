@@ -118,10 +118,11 @@ def login():
 # Login
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    check_sql = f'''SELECT id, picture, product.title, product.price, color_id
+    check_sql = f'''SELECT id, color_id, picture, product.title, product.price, color_id
                 FROM product, product_has_color where count>0 
                 and product_has_color.product_id = product.id group by product.title'''
     products = execute_read_query(connect_db, check_sql)
+    print(products)
     print(session)
     # if session.get('logged_in'):
     #     session_login = session['logged_in']
@@ -130,22 +131,22 @@ def home():
     return render_template('home.html', products=products, sess_login=session.get('logged_in'))
 
 
-@app.route("/product/<int:id>", methods=['GET', 'POST'])
-def product(id):
+@app.route("/product/<int:id>/<int:color_id>", methods=['GET', 'POST'])
+def product(id, color_id):
     product_in_order = None
-    session['product_id'] = id
     msg = ''
-    check_info_product = f'''Select * from type, product, color, product_has_color, product_has_material, material
-                Where product.count>0
-                and type.id=product.type_id
-                and product.id=product_has_color.product_id 
-                and color.id=product_has_color.color_id 
-                and product.id=product_has_material.product_id
-                and material.id=product_has_material.material_id 
-                and product.id={id} group by product.title'''
+    check_info_product = f'''Select *, (GROUP_CONCAT(material SEPARATOR ', ')) as all_material from type, product, color, product_has_color, product_has_material, material
+                        Where product.count>0
+                        and type.id=product.type_id
+                        and product.id=product_has_color.product_id 
+                        and color.id=product_has_color.color_id 
+                        and product_has_material.material_id = material.id
+                        and product_has_material.product_id = product.id
+                        and product.id={id}
+                        and color_id = {color_id}'''
     product_data = execute_read_query(connect_db, check_info_product)[0]
-    # print(product_data)
-    check_picture_product = f'''Select color.id, picture from type, product, color, product_has_color
+    print(product_data)
+    check_picture_product = f'''Select product.id, color.id as color_id, picture from type, product, color, product_has_color
                 Where product.id=product_has_color.product_id 
                 and color.id=product_has_color.color_id
                 and product.id={id}'''
@@ -159,7 +160,7 @@ def product(id):
             actual_order = actual_order[0]
             id_actual_order = actual_order['id']
             check_product_in_order = f'''select * from order_product where idOrder = {id_actual_order}
-                                                                                     and idProduct = {id}'''
+                                                                                     and idProduct = {id} and color_id = {color_id}'''
             product_add_order = execute_read_query(connect_db, check_product_in_order)
             if product_add_order != tuple():
                 product_in_order = True
@@ -173,11 +174,11 @@ def product(id):
                 id_actual_order = execute_query(connect_db, create_order)
                 print(f"{id_actual_order} Order создан")
             check_product_in_order = f'''select * from order_product where idOrder = {id_actual_order}
-                                                                     and idProduct = {id}'''
+                                                                     and idProduct = {id} and color_id = {color_id}'''
             product_add_order = execute_read_query(connect_db, check_product_in_order)
             if product_add_order == tuple():
                 insert_product = f'''INSERT INTO `sofa_shop`.`order_product` (`idOrder`, `idProduct`, `count`, `color_id`)
-                                VALUES ('{id_actual_order}', '{id}', '1', '1');'''
+                                VALUES ('{id_actual_order}', '{id}', '1', '{color_id}');'''
                 execute_query(connect_db, insert_product)
                 product_in_order = True
                 msg = 'Товар добавлен в корзину'
@@ -193,8 +194,9 @@ def product(id):
         #     pass
         #     msg = 'Возникли неполадки на сервере, повторите позже'
         print(product_in_order)
+        print(id_actual_order, id, color_id)
     return render_template('product.html', pro_item=product_data, pro_pic=product_picture,
-                           sess_login=session.get('logged_in'), msg=msg, product_in_order=product_in_order)
+                           sess_login=session.get('logged_in'), msg=msg, product_in_order=product_in_order, color_id=color_id)
 
 
 #

@@ -80,7 +80,7 @@
     [class*=card-product-grid] .price {
         color: #383d43;
         font-weight: 600;
-        font-size: 16px;
+
     }
 
     .card-product-grid .topbar {
@@ -110,80 +110,51 @@
 <!--    }-->
 
 
-
-
 </style>
 <!--<div class="container">-->
-<div class="row flex-no-wrap"></div>
+<!--<div class="row flex-no-wrap"></div>-->
 
 <div class="d-grid gap-2 " style="grid-template-columns: 1fr 3fr; padding-left: 65px; padding-right: 65px;">
-    <div class="sticky bg-light border rounded-3" style="width: 340px; height: 600px">
+    <div class="sticky bg-light border rounded-3" style="left: 0; width: 340px; height: 100vh;">
 
         <br><br>Сортировка<br><br>
     </div>
-<!--    <div class="bg-light border rounded-3">-->
-<!--        <div style="margin:10px">-->
-            <div class="row">
-                {%for product in products%}
-                <div class="col-6 col-sm-12 col-md-4 col-lg-six mb-4">
-                    <!--            <a href="/product/{{product.id}}">-->
-                    <figure class="card card-product-grid h-100">
-                        <div class="img-wrap rounded bg-gray-light">
-                            <!--                    <span class="topbar">-->
-                            <!--                        <span class="badge tag-discount">-20%</span>-->
-                            <!--                    </span>-->
-                            <span class="overlay"></span>
-                            <a href="/product/{{product.id}}">
-                                <img class="mix-blend-mode"
-                                     src="{{product.picture}}"
-                                     alt=" ">
-                            </a>
-                        </div>
-                        <figcaption class="card-product-info">
-                            <a href="/product/{{product.id}}" class="title">{{product.title}}</a>
-                            <div class="price-wrap">
-                                <span class="price">{{product.price}} ₽</span>
-                                <!--                        <del class="discount-price">$23.95</del>-->
-                            </div>
-                            <a href="/product/{{product.id}}">
-                                <button class="btn btn-sm btn-outline-danger w-100 mt-2">Приобрести</button>
-                            </a>
-
-                        </figcaption>
-                    </figure>
+    <!--    <div class="bg-light border rounded-3">-->
+    <!--        <div style="margin:10px">-->
+    <div class="row">
+        {%for product in products%}
+        <div class="col-6 col-sm-12 col-md-4 col-lg-six mb-4">
+            <!--            <a href="/product/{{product.id}}">-->
+            <figure class="card card-product-grid">
+                <div class="img-wrap rounded bg-gray-light">
+                    <!--                    <span class="topbar">-->
+                    <!--                        <span class="badge tag-discount">-20%</span>-->
+                    <!--                    </span>-->
+                    <span class="overlay"></span>
+                    <a href="/product/{{product.id}}/{{product.color_id}}">
+                        <img class="mix-blend-mode"
+                             src="{{product.picture}}"
+                             alt=" ">
+                    </a>
                 </div>
-                {%endfor%}
-                {%for product in products%}
-                <div class="col-6 col-sm-6 col-md-4 col-lg-six mb-4">
-                    <!--            <a href="/product/{{product.id}}">-->
-                    <figure class="card card-product-grid h-100">
-                        <div class="img-wrap rounded bg-gray-light">
-                            <!--                    <span class="topbar">-->
-                            <!--                        <span class="badge tag-discount">-20%</span>-->
-                            <!--                    </span>-->
-                            <span class="overlay"></span>
-                            <a href="/product/{{product.id}}">
-                                <img class="mix-blend-mode"
-                                     src="{{product.picture}}"
-                                     alt=" ">
-                            </a>
-                        </div>
-                        <figcaption class="card-product-info">
-                            <a href="/product/{{product.id}}" class="title">{{product.title}}</a>
-                            <div class="price-wrap">
-                                <span class="price">{{product.price}} ₽</span>
-                                <!--                        <del class="discount-price">$23.95</del>-->
-                            </div>
-                            <a href="/product/{{product.id}}">
-                                <button class="btn btn-sm btn-outline-danger w-100 mt-2">Приобрести</button>
-                            </a>
-
-                        </figcaption>
-                    </figure>
+                <div>
                 </div>
-                {%endfor%}
-            </div>
+                <figcaption class="card-product-info">
+                    <a href="/product/{{product.id}}/{{product.color_id}}" class="title">{{product.title}}</a>
+                    <div class="price-wrap">
+                        <span class="price">{{product.price}} ₽</span>
+                        <!--                        <del class="discount-price">$23.95</del>-->
+                    </div>
+                    <a href="/product/{{product.id}}/{{product.color_id}}">
+                        <button class="btn btn-sm btn-outline-danger w-100 mt-2">Приобрести</button>
+                    </a>
+
+                </figcaption>
+            </figure>
         </div>
+        {%endfor%}
+
+
     </div>
 </div>
 <!--</div>-->
