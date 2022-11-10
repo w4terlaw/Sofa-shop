@@ -9,7 +9,7 @@ from db_CRUD import execute_read_query, execute_query
 app = Flask(__name__)
 
 app.secret_key = 'super secret key'
-app.permanent_session_lifetime = datetime.timedelta(seconds=60)
+app.permanent_session_lifetime = datetime.timedelta(seconds=600)
 mysql = MySQL(app)
 
 
@@ -73,8 +73,6 @@ def login():
     # print(request.url_root + 'login')
     if (request.referrer != request.url_root + 'login') and (request.referrer != request.url_root + 'reg'):
         session['request'] = request.referrer
-        print(session['request'])
-        print(request.referrer)
     # if session.get['refferer_back'] == None:
     #     session['refferer_back'] = True
     # if session['refferer_back']:
@@ -88,7 +86,6 @@ def login():
 
         check_sql = f'''select * from user where email = "{email}"'''
         login_user = execute_read_query(connect_db, check_sql)
-        print(login_user)
         if login_user == tuple():
             msg = 'Неверный никнейм или пароль.'
         else:
@@ -106,7 +103,6 @@ def login():
                 session['last_name'] = login_user['last_name']
                 session['nickname'] = login_user['email']
                 session['user_id'] = login_user['id']
-                print(f"ревест внутри {session.get('request')}")
                 if session.get('request') != None:
                     return redirect(session.get('request'))
                 return redirect(url_for('home'))
@@ -122,12 +118,10 @@ def home():
                 FROM product, product_has_color where count>0 
                 and product_has_color.product_id = product.id group by product.title'''
     products = execute_read_query(connect_db, check_sql)
-    print(products)
     print(session)
     # if session.get('logged_in'):
     #     session_login = session['logged_in']
     #     return render_template('home.html', products=products, sess_login=session['logged_in'])
-    print("Сессия завершена")
     return render_template('home.html', products=products, sess_login=session.get('logged_in'))
 
 
@@ -135,21 +129,17 @@ def home():
 def product(id, color_id):
     product_in_order = None
     msg = ''
-    check_info_product = f'''Select *, (GROUP_CONCAT(material SEPARATOR ', ')) as all_material from type, product, color, product_has_color, product_has_material, material
-                        Where product.count>0
-                        and type.id=product.type_id
-                        and product.id=product_has_color.product_id 
-                        and color.id=product_has_color.color_id 
-                        and product_has_material.material_id = material.id
-                        and product_has_material.product_id = product.id
-                        and product.id={id}
-                        and color_id = {color_id}'''
+    check_info_product = f'''Select *, (GROUP_CONCAT(material SEPARATOR ', ')) as all_material 
+                        from type, product, color, product_has_color, product_has_material, material
+                        Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id 
+                        and color.id=product_has_color.color_id and product_has_material.material_id = material.id
+                        and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
     product_data = execute_read_query(connect_db, check_info_product)[0]
     print(product_data)
     check_picture_product = f'''Select product.id, color.id as color_id, picture from type, product, color, product_has_color
-                Where product.id=product_has_color.product_id 
-                and color.id=product_has_color.color_id
-                and product.id={id}'''
+                            Where product.id=product_has_color.product_id 
+                            and color.id=product_has_color.color_id
+                            and product.id={id}'''
     product_picture = execute_read_query(connect_db, check_picture_product)
     if session.get('logged_in'):
         check_actual_order = f'''SELECT id, actual FROM sofa_shop.order 
@@ -160,7 +150,7 @@ def product(id, color_id):
             actual_order = actual_order[0]
             id_actual_order = actual_order['id']
             check_product_in_order = f'''select * from order_product where idOrder = {id_actual_order}
-                                                                                     and idProduct = {id} and color_id = {color_id}'''
+                                     and idProduct = {id} and color_id = {color_id}'''
             product_add_order = execute_read_query(connect_db, check_product_in_order)
             if product_add_order != tuple():
                 product_in_order = True
@@ -174,7 +164,7 @@ def product(id, color_id):
                 id_actual_order = execute_query(connect_db, create_order)
                 print(f"{id_actual_order} Order создан")
             check_product_in_order = f'''select * from order_product where idOrder = {id_actual_order}
-                                                                     and idProduct = {id} and color_id = {color_id}'''
+                                     and idProduct = {id} and color_id = {color_id}'''
             product_add_order = execute_read_query(connect_db, check_product_in_order)
             if product_add_order == tuple():
                 insert_product = f'''INSERT INTO `sofa_shop`.`order_product` (`idOrder`, `idProduct`, `count`, `color_id`)
@@ -194,9 +184,30 @@ def product(id, color_id):
         #     pass
         #     msg = 'Возникли неполадки на сервере, повторите позже'
         print(product_in_order)
-        print(id_actual_order, id, color_id)
     return render_template('product.html', pro_item=product_data, pro_pic=product_picture,
-                           sess_login=session.get('logged_in'), msg=msg, product_in_order=product_in_order, color_id=color_id)
+                           sess_login=session.get('logged_in'), msg=msg, product_in_order=product_in_order,
+                           color_id=color_id)
+
+
+@app.route("/cart")
+def cart():
+    msg = ''
+    products_in_cart=None
+    if session.get('logged_in'):
+        check_actual_order = f'''SELECT id FROM sofa_shop.order 
+                            where idUser = {session.get('user_id')} and actual = 1'''
+        actual_order = execute_read_query(connect_db, check_actual_order)
+        if actual_order != tuple():
+            id_actual = actual_order[0]['id']
+            check_products_cart = f'''SELECT * FROM order_product, product_has_color, product, color
+                                Where idOrder = {id_actual} 
+                                and order_product.color_id = color.id and product_has_color.color_id = color.id 
+                                and idProduct=product.id and product_id=product.id'''
+            products_in_cart = execute_read_query(connect_db, check_products_cart)
+            print(products_in_cart)
+        else:
+            msg = "Корзина пуста"
+    return render_template('cart.html', msg=msg, products_in_cart=products_in_cart, sess_login=session.get('logged_in'))
 
 
 #
@@ -310,11 +321,6 @@ def test():
         print(msg)
         return jsonify({'msg': msg})
     return render_template('test.html')
-
-
-@app.route("/cart")
-def cart():
-    return render_template('cart.html')
 
 
 #
