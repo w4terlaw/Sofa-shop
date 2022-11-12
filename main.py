@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, json
 from flask_mysqldb import MySQL, MySQLdb
 import re
@@ -192,7 +194,6 @@ def product(id, color_id):
 @app.route("/cart")
 def cart():
     msg = ''
-    products_in_cart=None
     if session.get('logged_in'):
         check_actual_order = f'''SELECT id FROM sofa_shop.order 
                             where idUser = {session.get('user_id')} and actual = 1'''
@@ -204,10 +205,60 @@ def cart():
                                 and order_product.color_id = color.id and product_has_color.color_id = color.id 
                                 and idProduct=product.id and product_id=product.id'''
             products_in_cart = execute_read_query(connect_db, check_products_cart)
-            print(products_in_cart)
+            check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM sofa_shop.order_product, product 
+                            where idOrder = '{id_actual}' and idProduct=product.id'''
+            total_price = str(execute_read_query(connect_db, check_total_price)[0]['total_price']) + ' ₽'
+            print(total_price)
+            check_total_count = f'''SELECT sum(order_product.count) as total_count FROM sofa_shop.order_product 
+                                        where idOrder="{id_actual}"'''
+            total_count = execute_read_query(connect_db, check_total_count)[0]['total_count']
+            if products_in_cart != tuple():
+                return render_template('cart.html', msg=msg, products_in_cart=products_in_cart,
+                                       total_count=total_count,
+                                       sess_login=session.get('logged_in'),
+                                       total_price=total_price)
         else:
             msg = "Корзина пуста"
-    return render_template('cart.html', msg=msg, products_in_cart=products_in_cart, sess_login=session.get('logged_in'))
+    return render_template('cart.html', msg=msg, sess_login=session.get('logged_in'))
+
+
+@app.route('/change_count', methods=['GET', 'POST'])
+def change_count():
+    check_actual_order = f'''SELECT id FROM sofa_shop.order 
+                                where idUser = {session.get('user_id')} and actual = 1'''
+    actual_order = execute_read_query(connect_db, check_actual_order)[0]['id']
+    product_id = request.args.get('product_id')
+    color_id = request.args.get('color_id')
+    product_count = request.args.get('pro_count')
+
+    update_count_product = f'''UPDATE order_product SET `count` = '{product_count}'
+    WHERE (`idOrder` = '{actual_order}') and (`idProduct` = '{product_id}') and (`color_id` = '{color_id}');'''
+    execute_query(connect_db, update_count_product)
+
+    check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM sofa_shop.order_product, product 
+                                where idOrder = '{actual_order}' and idProduct=product.id'''
+    total_price = str(execute_read_query(connect_db, check_total_price)[0]['total_price']) + ' ₽'
+    check_total_count = f'''SELECT sum(order_product.count) as total_count FROM sofa_shop.order_product 
+                                            where idOrder="{actual_order}"'''
+    total_count = f"Товары ({(execute_read_query(connect_db, check_total_count)[0]['total_count'])})"
+    return json.dumps({'total_price': total_price, 'total_count': total_count})
+
+
+@app.route("/cart/delete_product/<int:product_id>/<int:color_id>", methods=['GET', 'POST'])
+def delete_product(product_id, color_id):
+    check_actual_order = f'''SELECT id FROM sofa_shop.order 
+                                    where idUser = {session.get('user_id')} and actual = 1'''
+    actual_order = execute_read_query(connect_db, check_actual_order)[0]['id']
+    print(product_id, color_id)
+    delete_product_cart = f'''DELETE FROM `order_product` 
+    WHERE (`idOrder` = '{actual_order}') and (`idProduct` = '{product_id}') and (`color_id` = '{color_id}');'''
+    execute_query(connect_db, delete_product_cart)
+    check_empty_order = f'''SELECT * FROM sofa_shop.order_product where idOrder = {actual_order}'''
+    empty_order = execute_read_query(connect_db, check_empty_order)
+    if empty_order == tuple():
+        drop_order = f'''DELETE FROM `sofa_shop`.`order` WHERE (`id` = '{actual_order}');'''
+        execute_query(connect_db, drop_order)
+    return redirect(url_for('cart'))
 
 
 #
@@ -299,13 +350,6 @@ def exit_account():
     session.clear()
     session['request'] = request.referrer
     return redirect(session.get('request'))
-
-
-@app.route('/add_to_cart', methods=['GET', 'POST'])
-def add_to_cart():
-    # name = request.form['name']
-    name = 'Привет даунич'
-    return json.dumps({'msg': name})
 
 
 # @app.route('/test_add', methods=['GET', 'POST'])
