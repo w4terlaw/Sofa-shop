@@ -1,5 +1,3 @@
-import time
-
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, json
 from flask_mysqldb import MySQL, MySQLdb
 import re
@@ -75,10 +73,6 @@ def login():
     # print(request.url_root + 'login')
     if (request.referrer != request.url_root + 'login') and (request.referrer != request.url_root + 'reg'):
         session['request'] = request.referrer
-    # if session.get['refferer_back'] == None:
-    #     session['refferer_back'] = True
-    # if session['refferer_back']:
-    #     session['request'] = request.referrer
 
     print(session.get('request'))
     msg = ''
@@ -110,11 +104,11 @@ def login():
                 return redirect(url_for('home'))
             else:
                 msg = 'Неверный никнейм или пароль.'
-    return render_template('login.html', msg=msg, sess_login=session.get('logged_in'))
+    return render_template('login.html', msg=msg)
 
 
 # Login
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def home():
     check_sql = f'''SELECT id, color_id, picture, product.title, product.price, color_id
                 FROM product, product_has_color where count>0 
@@ -124,25 +118,30 @@ def home():
     # if session.get('logged_in'):
     #     session_login = session['logged_in']
     #     return render_template('home.html', products=products, sess_login=session['logged_in'])
-    return render_template('home.html', products=products, sess_login=session.get('logged_in'))
+    return render_template('home.html', products=products, sess_login=session)
 
 
 @app.route("/product/<int:id>/<int:color_id>", methods=['GET', 'POST'])
 def product(id, color_id):
     product_in_order = None
     msg = ''
-    check_info_product = f'''Select *, (GROUP_CONCAT(material SEPARATOR ', ')) as all_material 
-                        from type, product, color, product_has_color, product_has_material, material
+    check_info_product = f'''Select * from type, product, color, product_has_color, product_has_material, material
                         Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id 
                         and color.id=product_has_color.color_id and product_has_material.material_id = material.id
-                        and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
-    product_data = execute_read_query(connect_db, check_info_product)[0]
+                        and product_has_material.product_id = product.id and product.id="{id}" and color_id = "{color_id}"'''
+    product_data = execute_read_query(connect_db, check_info_product)
+    if product_data == tuple():
+        return '<h1>Invalid link</h1>'
+    else:
+        product_data = product_data[0]
+
     print(product_data)
     check_picture_product = f'''Select product.id, color.id as color_id, picture from type, product, color, product_has_color
                             Where product.id=product_has_color.product_id 
                             and color.id=product_has_color.color_id
                             and product.id={id}'''
     product_picture = execute_read_query(connect_db, check_picture_product)
+    print(product_picture)
     if session.get('logged_in'):
         check_actual_order = f'''SELECT id, actual FROM sofa_shop.order 
                                                     where idUser = {session.get('user_id')} and actual = 1'''
@@ -187,7 +186,7 @@ def product(id, color_id):
         #     msg = 'Возникли неполадки на сервере, повторите позже'
         print(product_in_order)
     return render_template('product.html', pro_item=product_data, pro_pic=product_picture,
-                           sess_login=session.get('logged_in'), msg=msg, product_in_order=product_in_order,
+                           sess_login=session, msg=msg, product_in_order=product_in_order,
                            color_id=color_id)
 
 
@@ -215,14 +214,13 @@ def cart():
             if products_in_cart != tuple():
                 return render_template('cart.html', msg=msg, products_in_cart=products_in_cart,
                                        total_count=total_count,
-                                       sess_login=session.get('logged_in'),
+                                       sess_login=session,
                                        total_price=total_price)
         else:
             msg = "Корзина пуста"
-    return render_template('cart.html', msg=msg, sess_login=session.get('logged_in'))
+    return render_template('cart.html', msg=msg, sess_login=session)
 
-
-@app.route('/change_count', methods=['GET', 'POST'])
+@app.route('/change_count')
 def change_count():
     check_actual_order = f'''SELECT id FROM sofa_shop.order 
                                 where idUser = {session.get('user_id')} and actual = 1'''
@@ -238,124 +236,42 @@ def change_count():
     check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM sofa_shop.order_product, product 
                                 where idOrder = '{actual_order}' and idProduct=product.id'''
     total_price = str(execute_read_query(connect_db, check_total_price)[0]['total_price']) + ' ₽'
+
     check_total_count = f'''SELECT sum(order_product.count) as total_count FROM sofa_shop.order_product 
                                             where idOrder="{actual_order}"'''
     total_count = f"Товары ({(execute_read_query(connect_db, check_total_count)[0]['total_count'])})"
+
     return json.dumps({'total_price': total_price, 'total_count': total_count})
 
 
-@app.route("/cart/delete_product/<int:product_id>/<int:color_id>", methods=['GET', 'POST'])
+@app.route("/cart/delete_product/<int:product_id>/<int:color_id>")
 def delete_product(product_id, color_id):
     check_actual_order = f'''SELECT id FROM sofa_shop.order 
                                     where idUser = {session.get('user_id')} and actual = 1'''
     actual_order = execute_read_query(connect_db, check_actual_order)[0]['id']
-    print(product_id, color_id)
+
     delete_product_cart = f'''DELETE FROM `order_product` 
     WHERE (`idOrder` = '{actual_order}') and (`idProduct` = '{product_id}') and (`color_id` = '{color_id}');'''
     execute_query(connect_db, delete_product_cart)
+
     check_empty_order = f'''SELECT * FROM sofa_shop.order_product where idOrder = {actual_order}'''
     empty_order = execute_read_query(connect_db, check_empty_order)
+
     if empty_order == tuple():
         drop_order = f'''DELETE FROM `sofa_shop`.`order` WHERE (`id` = '{actual_order}');'''
         execute_query(connect_db, drop_order)
     return redirect(url_for('cart'))
 
+@app.route('/cart_clear')
+def cart_clear():
+    pass
 
-#
-# # Create lesson
-# @app.route('/create_lesson', methods=['GET', 'POST'])
-# def create_lessons():
-#     if request.method == 'POST':
-#         title_lesson = request.form['title_lesson']
-#
-#         check_sql = f'''insert into lessons (title, user_id) values ('{title_lesson}', {session['id']})'''
-#         ID = execute_query(connect_db, check_sql)
-#
-#         return redirect(url_for('.lessons', id=ID))
-#
-#     return render_template("create_lesson.html")
-#
-#
-# # show specific lesson and its lists
-# @app.route("/lessons/<int:id>", methods=['GET', 'POST'])
-# def lessons(id):
-#     check_sql = f'''SELECT * FROM lessons WHERE id = {id}'''
-#     lesson = execute_read_query(connect_db, check_sql)[0]
-#     check_sql = f'''SELECT lists.id, lists.date from lessons, lists where lessons.id = lessons_id AND lessons_id = {id} '''
-#     data = execute_read_query(connect_db, check_sql)
-#     if request.method == 'POST':
-#         check_sql = f'''INSERT INTO `qr_site`.`lists` (`date`, `lessons_id`) VALUES (Curtime(), {id})'''
-#         execute_query(connect_db, check_sql)
-#
-#         return redirect(url_for('lessons', id=id))
-#
-#     return render_template('lesson.html', lesson=lesson, lists=data)
-#
-#
-# @app.route("/lessons/<int:id>/<int:id_lists>", methods=['GET', 'POST'])
-# def lists(id, id_lists):
-#     if not session:
-#         return redirect(url_for('login'))
-#     check_sql = f'''Select TIMEDIFF(curtime(),(SELECT date_scan FROM lists_has_students WHERE user_id = {session['id']} and lists_id = {id_lists}  ORDER BY date_scan DESC LIMIT 1)) as timediff'''
-#     timediff = execute_read_query(connect_db, check_sql)[0]
-#     if not session['teacher'] and timediff['timediff'] != None:
-#         if timediff['timediff'] > datetime.timedelta(seconds=3000):
-#             write_sql = f'''INSERT INTO `qr_site`.`lists_has_students` (`lists_id`, `date_scan`, `user_id`) VALUES ('{id_lists}', CURTIME(), {session["id"]})'''
-#             execute_query(connect_db, write_sql)
-#     elif not session['teacher']:
-#         write_sql = f'''INSERT INTO `qr_site`.`lists_has_students` (`lists_id`, `date_scan`, `user_id`) VALUES ('{id_lists}', CURTIME(), {session["id"]})'''
-#         execute_query(connect_db, write_sql)
-#
-#     check_sql = f'''SELECT * FROM lists WHERE id = {id_lists}'''
-#     list_one = execute_read_query(connect_db, check_sql)[0]
-#     check_sql = f'''
-#     Select CONCAT_WS(' ', first_name, last_name) as student, groupp,
-#     group_concat(distinct time(date_scan) SEPARATOR ' - ') as date
-#     from lists_has_students, user
-#     where lists_id = {id_lists} and user.id = lists_has_students.user_id and user.teacher = 0
-#     group by student, groupp'''
-#     data_students = execute_read_query(connect_db, check_sql)
-#     qr = f'site.com/lessons/{id}/{id_lists}'
-#     return render_template('lists.html', list_one=list_one, students=data_students, qr=qr)
-#
-#
-# # Update data from DB
-# @app.route("/red/<int:upd_id>", methods=['GET', 'POST'])
-# def update_db(upd_id):
-#     check_sql = f'''SELECT title FROM lessons WHERE id = {upd_id}'''
-#     title_lesson = execute_read_query(connect_db, check_sql)[0]
-#
-#     if request.method == 'POST':
-#         update_lesson = request.form['update_text_lesson']
-#
-#         check_sql = f'''UPDATE lessons SET `title` = '{update_lesson}' WHERE (`id` = {upd_id});'''
-#         execute_query(connect_db, check_sql)
-#
-#         return redirect(url_for('check_lessons'))
-#
-#     return render_template('update_lesson.html', title_lesson=title_lesson)
-#
-#
-# # Delete data from DB
-# @app.route("/del/<int:del_lesson_id>")
-# def delete_lesson_db(del_lesson_id):
-#     check_sql = f'''DELETE FROM lessons WHERE (`id` = '{del_lesson_id}')'''
-#     execute_query(connect_db, check_sql)
-#
-#     return redirect(url_for('check_lessons'))
-#
 
 @app.route("/exit")
 def exit_account():
     session.clear()
     session['request'] = request.referrer
     return redirect(session.get('request'))
-
-
-# @app.route('/test_add', methods=['GET', 'POST'])
-# def add_to_test():
-#     name = request.form['name']
-#     return json.dumps({'msg': name})
 
 
 @app.route("/test", methods=["GET", "POST"])
@@ -365,16 +281,6 @@ def test():
         print(msg)
         return jsonify({'msg': msg})
     return render_template('test.html')
-
-
-#
-#
-# @app.route("/lessons/<int:id>/del/<int:del_list_id>")
-# def delete_list_db(id, del_list_id):
-#     check_sql = f'''DELETE FROM lists WHERE (`id` = '{del_list_id}')'''
-#     execute_query(connect_db, check_sql)
-#
-#     return redirect(url_for('.lessons', id=id))
 
 
 if __name__ == '__main__':

@@ -4,159 +4,515 @@
 Главная
 {% endblock %}
 {% block body %}
-<style>
-    a {
-        text-decoration: none;
-    }
-<!--    @media screen and (min-width: 1200px) {-->
-<!--        .col-lg-six {-->
-<!--            flex: 0 0 20%;-->
-<!--            max-width: 20%;-->
-<!--        }-->
+<!--<style>-->
+<!--    a {-->
+<!--        text-decoration: none;-->
 <!--    }-->
-<!--    @media screen and (max-width: 1000px) {-->
-<!--        .card.card-product-grid {-->
-<!--            background-color:black-->
-<!--        }-->
+<!--&lt;!&ndash;    @media screen and (min-width: 1200px) {&ndash;&gt;-->
+<!--&lt;!&ndash;        .col-lg-six {&ndash;&gt;-->
+<!--&lt;!&ndash;            flex: 0 0 20%;&ndash;&gt;-->
+<!--&lt;!&ndash;            max-width: 20%;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    @media screen and (max-width: 1000px) {&ndash;&gt;-->
+<!--&lt;!&ndash;        .card.card-product-grid {&ndash;&gt;-->
+<!--&lt;!&ndash;            background-color:black&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+<!--    .card.card-product-grid {-->
+<!--        box-shadow: 0 1px 2px rgba(51 51 51 / 7%);-->
 <!--    }-->
 
-    .card.card-product-grid {
-        box-shadow: 0 1px 2px rgba(51 51 51 / 7%);
-    }
+<!--    .card.card-product-grid .img-wrap {-->
+<!--        border-radius: 0.25rem 0.25rem 0 0;-->
+<!--    }-->
 
-    .card.card-product-grid .img-wrap {
-        border-radius: 0.25rem 0.25rem 0 0;
-    }
+<!--    .card-product-grid .img-wrap {-->
+<!--&lt;!&ndash;        max-height: 300px;&ndash;&gt;-->
+<!--    }-->
 
-    .card-product-grid .img-wrap {
-<!--        max-height: 300px;-->
-    }
+<!--    [class*=card-product-grid] .img-wrap {-->
+<!--        position: relative;-->
+<!--    }-->
 
-    [class*=card-product-grid] .img-wrap {
-        position: relative;
-    }
+<!--    .img-wrap {-->
+<!--        text-align: center;-->
+<!--        overflow: hidden;-->
+<!--        display: block;-->
+<!--    }-->
 
-    .img-wrap {
-        text-align: center;
-        overflow: hidden;
-        display: block;
-    }
+<!--    [class*=card-product-grid] .img-wrap img {-->
+<!--        margin-top: -10%;-->
+<!--        margin-bottom: -10%;-->
+<!--        height: auto;-->
+<!--        max-width: 100%;-->
+<!--        width: auto;-->
+<!--    }-->
 
-    [class*=card-product-grid] .img-wrap img {
-        margin-top: -10%;
-        margin-bottom: -10%;
-        height: auto;
-        max-width: 100%;
-        width: auto;
-    }
-
-    .mix-blend-mode {
-
-        mix-blend-mode: multiply;
-    }
-
-    .bg-gray-light {
-<!--        background-color: #e9ecef;-->
-<!--        background-color: #e9ecef85;-->
-    }
-
-    .card-product-grid .card-product-info {
-        padding: 0.25rem 0.50rem;
-        overflow: hidden;
-    }
-
-    .card-product-grid .title {
-        color: #6a6f74;
-        height: 3rem;
-        font-weight: 600;
-        font-size: 16px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        margin-bottom: 0.15rem;
-    }
-
-    [class*=card-product-grid] .price {
-        color: #383d43;
-        font-weight: 600;
-
-    }
-
-    .card-product-grid .topbar {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        z-index: 10;
-        text-align: right;
-        padding: 1px 6px;
-    }
-
-    .card-product-grid .topbar .tag-discount {
-        background-color: #e13454;
-        border-radius: 0.25rem;
-        padding: 0.32rem 0.7rem;
-    }
-    .sticky {
-        position: sticky;
-        top: 4.5em;
-    }
 <!--    .mix-blend-mode {-->
-<!--       transition: 0.5s ease-in-out;-->
+
+<!--        mix-blend-mode: multiply;-->
 <!--    }-->
-<!--    .mix-blend-mode:hover {-->
-<!--       transform: scale(1.05);-->
+
+<!--    .bg-gray-light {-->
+<!--&lt;!&ndash;        background-color: #e9ecef;&ndash;&gt;-->
+<!--&lt;!&ndash;        background-color: #e9ecef85;&ndash;&gt;-->
 <!--    }-->
+
+<!--    .card-product-grid .card-product-info {-->
+<!--        padding: 0.25rem 0.50rem;-->
+<!--        overflow: hidden;-->
+<!--    }-->
+
+<!--    .card-product-grid .title {-->
+<!--        color: #6a6f74;-->
+<!--        height: 3rem;-->
+<!--        font-weight: 600;-->
+<!--        font-size: 16px;-->
+<!--        display: -webkit-box;-->
+<!--        -webkit-line-clamp: 2;-->
+<!--        -webkit-box-orient: vertical;-->
+<!--        overflow: hidden;-->
+<!--        margin-bottom: 0.15rem;-->
+<!--    }-->
+
+<!--    [class*=card-product-grid] .price {-->
+<!--        color: #383d43;-->
+<!--        font-weight: 600;-->
+
+<!--    }-->
+
+<!--    .card-product-grid .topbar {-->
+<!--        position: absolute;-->
+<!--        top: 0;-->
+<!--        right: 0;-->
+<!--        width: 100%;-->
+<!--        z-index: 10;-->
+<!--        text-align: right;-->
+<!--        padding: 1px 6px;-->
+<!--    }-->
+
+<!--    .card-product-grid .topbar .tag-discount {-->
+<!--        background-color: #e13454;-->
+<!--        border-radius: 0.25rem;-->
+<!--        padding: 0.32rem 0.7rem;-->
+<!--    }-->
+<!--    .sticky {-->
+<!--        position: sticky;-->
+<!--        top: 4.5em;-->
+<!--    }-->
+<!--&lt;!&ndash;    .mix-blend-mode {&ndash;&gt;-->
+<!--&lt;!&ndash;       transition: 0.5s ease-in-out;&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    .mix-blend-mode:hover {&ndash;&gt;-->
+<!--&lt;!&ndash;       transform: scale(1.05);&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+
+
+<!--</style>-->
+<!--<div class="container">-->
+<!--<div class="row flex-no-wrap"></div>-->
+<style>
+.bg-light {
+ z-index:1;
+}
+
 
 
 </style>
-<!--<div class="container">-->
-<!--<div class="row flex-no-wrap"></div>-->
 
-<div class="d-grid gap-2 " style="grid-template-columns: 1fr 3fr; padding-left: 65px; padding-right: 65px;">
-    <div class="sticky bg-light border rounded-3" style="left: 0; width: 340px; height: 100vh;">
+<div class="product-container">
 
-        <br><br>Сортировка<br><br>
-    </div>
-    <!--    <div class="bg-light border rounded-3">-->
-    <!--        <div style="margin:10px">-->
-    <div class="row">
-        {%for product in products%}
-        <div class="col-6 col-sm-12 col-md-4 col-lg-six mb-4">
-            <!--            <a href="/product/{{product.id}}">-->
-            <figure class="card card-product-grid">
-                <div class="img-wrap rounded bg-gray-light">
-                    <!--                    <span class="topbar">-->
-                    <!--                        <span class="badge tag-discount">-20%</span>-->
-                    <!--                    </span>-->
-                    <span class="overlay"></span>
-                    <a href="/product/{{product.id}}/{{product.color_id}}">
-                        <img class="mix-blend-mode"
-                             src="{{product.picture}}"
-                             alt=" ">
-                    </a>
+    <div class="container">
+
+
+        <!--
+          - SIDEBAR
+        -->
+
+        <div class="sidebar  has-scrollbar" data-mobile-menu>
+
+            <div class="sidebar-category">
+
+                <div class="sidebar-top">
+                    <h2 class="sidebar-title">Категории</h2>
+
+                    <button class="sidebar-close-btn" data-mobile-menu-close-btn>
+                        <ion-icon name="close-outline"></ion-icon>
+                    </button>
                 </div>
-                <div>
-                </div>
-                <figcaption class="card-product-info">
-                    <a href="/product/{{product.id}}/{{product.color_id}}" class="title">{{product.title}}</a>
-                    <div class="price-wrap">
-                        <span class="price">{{product.price}} ₽</span>
-                        <!--                        <del class="discount-price">$23.95</del>-->
-                    </div>
-                    <a href="/product/{{product.id}}/{{product.color_id}}">
-                        <button class="btn btn-sm btn-outline-danger w-100 mt-2">Приобрести</button>
-                    </a>
 
-                </figcaption>
-            </figure>
+                <ul class="sidebar-menu-category-list">
+
+                    <li class="sidebar-menu-category">
+
+                        <button class="sidebar-accordion-menu" data-accordion-btn>
+
+                            <div class="menu-title-flex">
+                                <img src="../static/public/healthy.png" alt="healthy" width="20" height="20"
+                                     class="menu-title-img">
+
+                                <p class="menu-title">Здоровье</p>
+                            </div>
+
+                            <div>
+                                <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                                <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                            </div>
+
+                        </button>
+
+                        <ul class="sidebar-submenu-category-list" data-accordion>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Диабет</p>
+                                    <data value="300" class="stock" title="Available Stock">300</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Избыточный вес</p>
+                                    <data value="60" class="stock" title="Available Stock">60</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Аллергия</p>
+                                    <data value="50" class="stock" title="Available Stock">50</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Болезни суставов</p>
+                                    <data value="87" class="stock" title="Available Stock">87</data>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li class="sidebar-menu-category">
+
+                        <button class="sidebar-accordion-menu" data-accordion-btn>
+
+                            <div class="menu-title-flex">
+                                <img src="../static/public/vaccination.png" alt="buetifful" class="menu-title-img"
+                                     width="20"
+                                     height="20">
+
+                                <p class="menu-title">Красота</p>
+                            </div>
+
+                            <div>
+                                <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                                <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                            </div>
+
+                        </button>
+
+                        <ul class="sidebar-submenu-category-list" data-accordion>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Бальзамы и кондиционеры</p>
+                                    <data value="45" class="stock" title="Available Stock">45</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Депиляция и бритье</p>
+                                    <data value="75" class="stock" title="Available Stock">75</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Уход за телом</p>
+                                    <data value="35" class="stock" title="Available Stock">35</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Патчи под глаза</p>
+                                    <data value="26" class="stock" title="Available Stock">26</data>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li class="sidebar-menu-category">
+
+                        <button class="sidebar-accordion-menu" data-accordion-btn>
+
+                            <div class="menu-title-flex">
+                                <img src="../static/public/vaccination (1).png" alt="clothes" class="menu-title-img"
+                                     width="20"
+                                     height="20">
+
+                                <p class="menu-title">Для детей</p>
+                            </div>
+
+                            <div>
+                                <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                                <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                            </div>
+
+                        </button>
+
+                        <ul class="sidebar-submenu-category-list" data-accordion>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Подгузники</p>
+                                    <data value="46" class="stock" title="Available Stock">46</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Гигиена малыша</p>
+                                    <data value="73" class="stock" title="Available Stock">73</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Детское питание</p>
+                                    <data value="61" class="stock" title="Available Stock">61</data>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li class="sidebar-menu-category">
+
+                        <button class="sidebar-accordion-menu" data-accordion-btn>
+
+                            <div class="menu-title-flex">
+                                <img src="../static/public/vaccination (2).png" alt="perfume" class="menu-title-img"
+                                     width="20"
+                                     height="20">
+
+                                <p class="menu-title">Зоотовары</p>
+                            </div>
+
+                            <div>
+                                <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                                <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                            </div>
+
+                        </button>
+
+                        <ul class="sidebar-submenu-category-list" data-accordion>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Ветаптека</p>
+                                    <data value="12" class="stock" title="Available Stock">24</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Контроль поведения</p>
+                                    <data value="60" class="stock" title="Available Stock">60</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Противопаразитарные средства</p>
+                                    <data value="50" class="stock" title="Available Stock">49</data>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li class="sidebar-menu-category">
+
+                        <button class="sidebar-accordion-menu" data-accordion-btn>
+
+                            <div class="menu-title-flex">
+                                <img src="../static/public/certificate.png" alt="cosmetics" class="menu-title-img"
+                                     width="20"
+                                     height="20">
+
+                                <p class="menu-title">С рецептом</p>
+                            </div>
+
+                            <div>
+                                <ion-icon name="add-outline" class="add-icon"></ion-icon>
+                                <ion-icon name="remove-outline" class="remove-icon"></ion-icon>
+                            </div>
+
+                        </button>
+
+                        <ul class="sidebar-submenu-category-list" data-accordion>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Болезни крови</p>
+                                    <data value="68" class="stock" title="Available Stock">68</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Антибиотики</p>
+                                    <data value="46" class="stock" title="Available Stock">46</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Кожа</p>
+                                    <data value="79" class="stock" title="Available Stock">79</data>
+                                </a>
+                            </li>
+
+                            <li class="sidebar-submenu-category">
+                                <a href="#" class="sidebar-submenu-title">
+                                    <p class="product-name">Онкология</p>
+                                    <data value="23" class="stock" title="Available Stock">23</data>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                </ul>
+
+            </div>
         </div>
-        {%endfor%}
 
+        <!--
+         - PRODUCT GRID
+       -->
+
+
+        <div class="product-main">
+            <!--            <h2 class="title">Мебель</h2>-->
+
+            <div class="product-grid">
+                {%for product in products%}
+
+                <div class="showcase bg-light">
+                    <style>
+                    </style>
+                    <div class="showcase-banner">
+                        <img style="z-index:-100" src="{{product.picture}}" alt="MEN Yarn Fleece Full-Zip Jacket"
+                             class="product-img default"
+                             width="300">
+                        <img style="z-index:-100" src="{{product.picture}}" alt="MEN Yarn Fleece Full-Zip Jacket"
+                             class="product-img hover"
+                             width="300">
+
+                        <div class="showcase-actions">
+                            <button title="Добавить в избранные"
+                                    style="display:flex; align-items:center;justify-content:center" class="btn-action">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-bag-heart-fill" viewBox="0 0 16 16">
+                                    <path d="M11.5 4v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5ZM8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1Zm0 6.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+                                </svg>
+                            </button>
+<!--                            <button title="Добавить в корзину"-->
+<!--                                    style="display:flex; align-items:center;justify-content:center" class="btn-action">-->
+<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+<!--                                     class="bi bi-bag-fill" viewBox="0 0 16 16">-->
+<!--                                    <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>-->
+<!--                                </svg>-->
+<!--                            </button>-->
+                        </div>
+                    </div>
+
+                    <div class="showcase-content">
+                        <!--                        <a href="#" class="showcase-category">Нет в наличии</a>-->
+                        <a style="text-decoration:none;font-size:16px;font-weight: 600;color: var(--bs-gray-dark)"
+                           href="/product/{{product.id}}/{{product.color_id}}">{{product.title}}</a>
+
+                        <div class="showcase-rating">
+                            <!--                            <p>Срок годности: 30.09.2024</p>-->
+
+                            <!--                            <div class="delivery">-->
+                            <!--                                <i class="fi fi-rr-home"></i>-->
+                            <!--                                <p>Самовывоз</p>-->
+
+                            <!--                            </div>-->
+
+                            <div class="price-box">
+                                <p style="margin-top:6px;font-size:20px;font-weight: 600;color: var(--bs-gray-700)"
+                                   class="">{{product.price}} ₽</p>
+                            </div>
+
+                            <!--                            <button>-->
+                            <!--                                Добавить в корзину-->
+                            <!--                            </button>-->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {%endfor%}
+            </div>
+
+        </div>
 
     </div>
+
 </div>
+<!--    <div class="row">-->
+<!--        {%for product in products%}-->
+<!--        <div class="col-6 col-sm-12 col-md-4 col-lg-six mb-4">-->
+<!--            &lt;!&ndash;            <a href="/product/{{product.id}}">&ndash;&gt;-->
+<!--            <figure class="card card-product-grid">-->
+<!--                <div class="img-wrap rounded bg-gray-light">-->
+<!--                    &lt;!&ndash;                    <span class="topbar">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <span class="badge tag-discount">-20%</span>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    </span>&ndash;&gt;-->
+<!--                    <span class="overlay"></span>-->
+<!--                    <a href="/product/{{product.id}}/{{product.color_id}}">-->
+<!--                        <img class="mix-blend-mode"-->
+<!--                             src="{{product.picture}}"-->
+<!--                             alt=" ">-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                </div>-->
+<!--                <figcaption class="card-product-info">-->
+<!--                    <a href="/product/{{product.id}}/{{product.color_id}}" class="title">{{product.title}}</a>-->
+<!--                    <div class="price-wrap">-->
+<!--                        <span class="price">{{product.price}} ₽</span>-->
+<!--                        &lt;!&ndash;                        <del class="discount-price">$23.95</del>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <a href="/product/{{product.id}}/{{product.color_id}}">-->
+<!--                        <button class="btn btn-sm btn-outline-danger w-100 mt-2">Приобрести</button>-->
+<!--                    </a>-->
+
+<!--                </figcaption>-->
+<!--            </figure>-->
+<!--        </div>-->
+<!--        {%endfor%}-->
+
+
+<!--    </div>-->
+<!--</div>-->
 <!--</div>-->
 <!--</div>-->
 <!--<div class="container">-->
