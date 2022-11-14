@@ -220,6 +220,7 @@ def cart():
             msg = "Корзина пуста"
     return render_template('cart.html', msg=msg, sess_login=session)
 
+
 @app.route('/change_count')
 def change_count():
     check_actual_order = f'''SELECT id FROM sofa_shop.order 
@@ -261,6 +262,7 @@ def delete_product(product_id, color_id):
         drop_order = f'''DELETE FROM `sofa_shop`.`order` WHERE (`id` = '{actual_order}');'''
         execute_query(connect_db, drop_order)
     return redirect(url_for('cart'))
+
 
 @app.route('/cart_clear')
 def cart_clear():

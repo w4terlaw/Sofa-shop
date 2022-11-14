@@ -60,10 +60,10 @@
     padding: 0;
 }
 
-
+/*
 li {
   list-style: none;
-}
+}*/
 
 button {
   background: none;
@@ -2219,7 +2219,7 @@ footer {
     --fs-5: 0.941rem;
 
     position: sticky;
-    top: 30px;
+    top: 104px;
     left: 0;
     padding: 0;
     min-width: calc(25% - 15px);
