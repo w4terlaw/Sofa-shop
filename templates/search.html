@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+Корзина
+{% endblock %}
+
+{% block body %}
+
+<script>
+    if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+    }
+
+</script>
+
+<div>
+Результат поиска {{search_value}}
+</div>
+
+{% endblock %}
