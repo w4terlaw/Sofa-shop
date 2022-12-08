@@ -32,8 +32,7 @@ def create_connection(host, user, password, db):
 
 
 connect_db = create_connection('localhost', 'root', 'root', 'sofa_shop')
-# connect_db = create_connection('sql.freedb.tech', 'freedb_waterlaw', 'BAEz**R9X2kTh@q', 'freedb_sofa_shop')
-# connect_db = create_connection('sql308.byethost7.com', 'b7_33162040', 'elmir2022', 'b7_33162040_sofa_shop')
+# connect_db = create_connection('waterlaw1.mysql.pythonanywhere-services.com', 'waterlaw1', 'elmir2022', 'waterlaw1$sofa_shop')
 
 # Show lesson on page
 @app.route('/reg', methods=['GET', 'POST'])
@@ -113,7 +112,7 @@ def login():
 def home():
     check_sql = f'''SELECT id, color_id, picture, product.title, product.price, color_id
                 FROM product, product_has_color where count>0 
-                and product_has_color.product_id = product.id'''
+                and product_has_color.product_id = product.id group by id'''
     products = execute_read_query(connect_db, check_sql)
     print(products)
     print(session)
@@ -127,10 +126,14 @@ def home():
 def product(id, color_id):
     product_in_order = None
     msg = ''
-    check_info_product = f'''Select * from type, product, color, product_has_color, product_has_material, material
-                        Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id 
-                        and color.id=product_has_color.color_id and product_has_material.material_id = material.id
-                        and product_has_material.product_id = product.id and product.id="{id}" and color_id = "{color_id}"'''
+    # check_info_product = f'''Select * from type, product, color, product_has_color, product_has_material, material
+    #                     Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id
+    #                     and color.id=product_has_color.color_id and product_has_material.material_id = material.id
+    #                     and product_has_material.product_id = product.id and product.id="{id}" and color_id = "{color_id}"'''
+    check_info_product = f'''Select *, GROUP_CONCAT(material SEPARATOR ', ') as full_material, product.id as pro_id from type, product, color, product_has_color, product_has_material, material
+                           Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id
+                           and color.id=product_has_color.color_id and product_has_material.material_id = material.id
+                           and product_has_material.product_id = product.id and product.id="{id}" and color_id = "{color_id}"'''
     product_data = execute_read_query(connect_db, check_info_product)
     if product_data == tuple():
         return '<h1>Invalid link</h1>'
