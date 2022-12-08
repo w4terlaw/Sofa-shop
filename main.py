@@ -32,7 +32,8 @@ def create_connection(host, user, password, db):
 
 
 connect_db = create_connection('localhost', 'root', 'root', 'sofa_shop')
-
+# connect_db = create_connection('sql.freedb.tech', 'freedb_waterlaw', 'BAEz**R9X2kTh@q', 'freedb_sofa_shop')
+# connect_db = create_connection('sql308.byethost7.com', 'b7_33162040', 'elmir2022', 'b7_33162040_sofa_shop')
 
 # Show lesson on page
 @app.route('/reg', methods=['GET', 'POST'])
@@ -112,8 +113,9 @@ def login():
 def home():
     check_sql = f'''SELECT id, color_id, picture, product.title, product.price, color_id
                 FROM product, product_has_color where count>0 
-                and product_has_color.product_id = product.id group by product.title'''
+                and product_has_color.product_id = product.id'''
     products = execute_read_query(connect_db, check_sql)
+    print(products)
     print(session)
     # if session.get('logged_in'):
     #     session_login = session['logged_in']
@@ -143,7 +145,7 @@ def product(id, color_id):
     product_picture = execute_read_query(connect_db, check_picture_product)
     print(product_picture)
     if session.get('logged_in'):
-        check_actual_order = f'''SELECT id, actual FROM sofa_shop.order 
+        check_actual_order = f'''SELECT id, actual FROM orders
                                                     where idUser = {session.get('user_id')} and actual = 1'''
         actual_order = execute_read_query(connect_db, check_actual_order)
         if actual_order != tuple():  # ORDER СУЩЕВСТВУЕТ
@@ -160,7 +162,7 @@ def product(id, color_id):
             if actual_order == tuple():  # ORDER НЕ СУЩЕВСТВУЕТ
 
                 print('Order неактуален')
-                create_order = f'''INSERT INTO `sofa_shop`.`order` (`idUser`, `datetime`, `actual`)
+                create_order = f'''INSERT INTO `orders` (`idUser`, `datetime`, `actual`)
                                VALUES ('{session.get('user_id')}', curdate(), 1)'''
                 id_actual_order = execute_query(connect_db, create_order)
                 print(f"{id_actual_order} Order создан")
@@ -168,7 +170,7 @@ def product(id, color_id):
                                      and idProduct = {id} and color_id = {color_id}'''
             product_add_order = execute_read_query(connect_db, check_product_in_order)
             if product_add_order == tuple():
-                insert_product = f'''INSERT INTO `sofa_shop`.`order_product` (`idOrder`, `idProduct`, `count`, `color_id`)
+                insert_product = f'''INSERT INTO `order_product` (`idOrder`, `idProduct`, `count`, `color_id`)
                                 VALUES ('{id_actual_order}', '{id}', '1', '{color_id}');'''
                 execute_query(connect_db, insert_product)
                 product_in_order = True
@@ -194,7 +196,7 @@ def product(id, color_id):
 def cart():
     msg = ''
     if session.get('logged_in'):
-        check_actual_order = f'''SELECT id FROM sofa_shop.order 
+        check_actual_order = f'''SELECT id FROM orders
                             where idUser = {session.get('user_id')} and actual = 1'''
         actual_order = execute_read_query(connect_db, check_actual_order)
         if actual_order != tuple():
@@ -204,11 +206,11 @@ def cart():
                                 and order_product.color_id = color.id and product_has_color.color_id = color.id 
                                 and idProduct=product.id and product_id=product.id'''
             products_in_cart = execute_read_query(connect_db, check_products_cart)
-            check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM sofa_shop.order_product, product 
+            check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM order_product, product 
                             where idOrder = '{id_actual}' and idProduct=product.id'''
             total_price = str(execute_read_query(connect_db, check_total_price)[0]['total_price']) + ' ₽'
             print(total_price)
-            check_total_count = f'''SELECT sum(order_product.count) as total_count FROM sofa_shop.order_product 
+            check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
                                         where idOrder="{id_actual}"'''
             total_count = execute_read_query(connect_db, check_total_count)[0]['total_count']
             if products_in_cart != tuple():
@@ -223,7 +225,7 @@ def cart():
 
 @app.route('/change_count')
 def change_count():
-    check_actual_order = f'''SELECT id FROM sofa_shop.order 
+    check_actual_order = f'''SELECT id FROM orders
                                 where idUser = {session.get('user_id')} and actual = 1'''
     actual_order = execute_read_query(connect_db, check_actual_order)[0]['id']
     product_id = request.args.get('product_id')
@@ -234,11 +236,11 @@ def change_count():
     WHERE (`idOrder` = '{actual_order}') and (`idProduct` = '{product_id}') and (`color_id` = '{color_id}');'''
     execute_query(connect_db, update_count_product)
 
-    check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM sofa_shop.order_product, product 
+    check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM order_product, product 
                                 where idOrder = '{actual_order}' and idProduct=product.id'''
     total_price = str(execute_read_query(connect_db, check_total_price)[0]['total_price']) + ' ₽'
 
-    check_total_count = f'''SELECT sum(order_product.count) as total_count FROM sofa_shop.order_product 
+    check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
                                             where idOrder="{actual_order}"'''
     total_count = f"Товары ({(execute_read_query(connect_db, check_total_count)[0]['total_count'])})"
 
@@ -247,7 +249,7 @@ def change_count():
 
 @app.route("/cart/delete_product/<int:product_id>/<int:color_id>")
 def delete_product(product_id, color_id):
-    check_actual_order = f'''SELECT id FROM sofa_shop.order 
+    check_actual_order = f'''SELECT id FROM orders
                                     where idUser = {session.get('user_id')} and actual = 1'''
     actual_order = execute_read_query(connect_db, check_actual_order)[0]['id']
 
@@ -255,11 +257,11 @@ def delete_product(product_id, color_id):
     WHERE (`idOrder` = '{actual_order}') and (`idProduct` = '{product_id}') and (`color_id` = '{color_id}');'''
     execute_query(connect_db, delete_product_cart)
 
-    check_empty_order = f'''SELECT * FROM sofa_shop.order_product where idOrder = {actual_order}'''
+    check_empty_order = f'''SELECT * FROM order_product where idOrder = {actual_order}'''
     empty_order = execute_read_query(connect_db, check_empty_order)
 
     if empty_order == tuple():
-        drop_order = f'''DELETE FROM `sofa_shop`.`order` WHERE (`id` = '{actual_order}');'''
+        drop_order = f'''DELETE FROM `orders` WHERE (`id` = '{actual_order}');'''
         execute_query(connect_db, drop_order)
     return redirect(url_for('cart'))
 

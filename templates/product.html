@@ -18,7 +18,8 @@
 
 }
 .img-wrap{
-    width: 30px;
+    max-width: 600px;
+    min-width: 300px;
     position: relative;
     margin: 20px 20px 0 0;
     align-items: center;
@@ -37,8 +38,20 @@
 
 .product-list{
     display:flex;
-    align-items:center
+    align-items:center;
+    justify-content: center
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 </style>
@@ -47,6 +60,17 @@
     if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
     }
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 
@@ -79,14 +103,15 @@
         <div class="columns">
             <div class="column is-6">
                 <div class="product-list">
-                    <div style="z-index:-10" class="img-wrap">
+                    <div style="z-index:-10;" class="img-wrap">
                         <!--                        style="margin:0 20px 0 0; width: 400px; object-position: center center;"-->
                         <img src="{{pro_item.picture}}" alt=" ">
                     </div>
                     <div style="    min-width: 320px;border: none; border-radius:12px; box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%); padding:20px"
                          class="product-box">
-                        <span style="text-decoration:none;font-size:20px;font-weight: 600;color: var(--bs-gray-dark)" class="product-title mb-2">
-                            {{pro_item.title}}</span>
+                        <span style="text-decoration:none;font-size:20px;font-weight: 600;color: var(--bs-gray-dark)"
+                              class="product-title mb-2">
+                                {{pro_item.title}}</span>
                         <br>
                         <!--                        <div class="title is-2">{{pro_item.title}}</div>-->
                         <span style="font-size:26px;font-weight: 600;color: var(--bs-gray-700)">{{pro_item.price}} ₽</span>
@@ -170,51 +195,90 @@
             </div>
             <div style="" class="column is-5 is-offset-1">
                 <br>
-                <h3 style="font-size:24px;font-weight: 600;" class="mb-3 ">Описание</h3>
+                <h3 style="font-size:22px;" class="sidebar-title">Описание</h3>
                 <p>{{pro_item.description}}</p>
-                <br>
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td class="has-text-right">
-                            <strong>Item ID</strong>
-                        </td>
-                        <td>1234</td>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right">
-                            <strong>Seller</strong>
-                        </td>
-                        <td>jsmith</td>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right">
-                            <strong>Added</strong>
-                        </td>
-                        <td>3 days ago</td>
-                    </tr>
-                    <tr>
-                        <td class="has-text-right">
-                            <strong>Views</strong>
-                        </td>
-                        <td>3</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <!--                <br>-->
+
+                <!--                <br>-->
+                <!--                <div>-->
+                <!--                    <div>-->
+                <!--                        <div>-->
+                <!--                            <ul>-->
+                <!--                                <li><a>Общий размер - {{pro_item.overall}}</a></li>-->
+                <!--                                <li><a>Cиденье - {{pro_item.seat}}</a></li>-->
+                <!--                            </ul>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <div>
+<!--                    <h3 style="font-size:20px;font-weight: 600;" class="mb-3 ">Характеристики</h3>-->
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <strong>Id</strong>
+                            </td>
+                            <td>{{pro_item.id}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Страна</span>
+                            </td>
+                            <td>{{pro_item.country}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Материал</span>
+                            </td>
+                            <td>{{pro_item.material}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Общий размер</span>
+                            </td>
+                            <td>{{pro_item.overall}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Размер сиденья</span>
+                            </td>
+                            <td>{{pro_item.seat}}</td>
+                        </tr>
+
+                        <!--                    <tr>-->
+                        <!--                        <td class="has-text-right">-->
+                        <!--                            <strong>Views</strong>-->
+                        <!--                        </td>-->
+                        <!--                        <td>3</td>-->
+                        <!--                    </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+                <!--                <table class="table">-->
+                <!--                    <thead>-->
+                <!--                    <tr>-->
+                <!--                        <th>Студент</th>-->
+                <!--                        <th>Страна</th>-->
+                <!--                        <th>Время сканирования</th>-->
+                <!--                    </tr>-->
+                <!--                    </thead>-->
+
+                <!--                    <tbody>-->
+                <!--                    {% for student in students %}-->
+                <!--                    <tr>-->
+                <!--                        <td>{{student.student}}</td>-->
+                <!--                        <td>{{pro_item.country}}</td>-->
+                <!--                        <td>{{student.date}}</td>-->
+                <!--                    </tr>-->
+                <!--                    {% endfor %}-->
+                <!--                    </tbody>-->
+
+                <!--                </table>-->
+
             </div>
         </div>
     </div>
-    <div class="section">
-        <div class="container">
-            <div class="tabs">
-                <ul>
-                    <li class="is-active"><a>Overview</a></li>
-                    <li><a>Details</a></li>
-                    <li><a>Reviews</a></li>
-                    <li><a>Shipping Calculator</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+
+
 </div>
 {% endblock %}
