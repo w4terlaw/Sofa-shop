@@ -1,5 +1,5 @@
 from flask import render_template, request, session, redirect, url_for
-from database.operations import execute_read_query, execute_query
+from database.extension import execute_read_query, execute_query
 from passlib.hash import sha256_crypt
 
 
@@ -59,11 +59,15 @@ def login():
                 session['last_name'] = login_user['last_name']
                 session['nickname'] = login_user['email']
                 session['user_id'] = login_user['id']
-                # check_actual_order = f'''SELECT id FROM orders
-                #                                     where idUser = {session.get('user_id')} and actual = 1'''
-                # actual_order = execute_read_query(connect_db, check_actual_order)[0]['id']
-                # check_count_product_cart = f''''''[0]
-                # session['count_product_cart'] = check_count_product_cart
+
+                check_actual_order = f'''SELECT id FROM orders
+                                                    where idUser = {session.get('user_id')} and actual = 1'''
+                actual_order = execute_read_query(check_actual_order)
+                if actual_order != tuple():
+                    check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
+                                                            where idOrder="{actual_order[0]['id']}"'''
+                    total_count = execute_read_query(check_total_count)[0]['total_count']
+                    session['count_product_cart'] = total_count
                 if session.get('request'):
                     return redirect(session.get('request'))
                 return redirect(url_for('home'))

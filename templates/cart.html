@@ -8,7 +8,7 @@
 
 <div class="container w-75">
     <div>
-        {%if sess_login.logged_in == true %}
+        {%if session.logged_in == true %}
 
         {%if products_in_cart is defined %}
         <!--        <div style="color:#001a34; font-size:28px; font-weight: 700;">Корзина</div>-->
@@ -52,7 +52,8 @@
                                     success: function(response) {
                                         var json = jQuery.parseJSON(response)
                                         $('#total_price').html(json.total_price)
-                                        $('#total_count').html(json.total_count)
+                                        $('#total_count').html('Товары ('+ json.total_count +')')
+                                        $('#product_count').html(json.total_count)
                                         console.log(response);
                                     },
                                     error: function(error) {

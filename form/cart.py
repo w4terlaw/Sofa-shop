@@ -1,4 +1,4 @@
-from database.operations import execute_read_query, execute_query
+from database.extension import execute_read_query, execute_query
 from flask import render_template, request, redirect, url_for, session, json
 
 
@@ -23,14 +23,14 @@ def cart():
             check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
                                         where idOrder="{id_actual}"'''
             total_count = execute_read_query(check_total_count)[0]['total_count']
+            session['count_product_cart'] = total_count
             if products_in_cart != tuple():
                 return render_template('cart.html', msg=msg, products_in_cart=products_in_cart,
                                        total_count=total_count,
-                                       sess_login=session,
                                        total_price=total_price)
         else:
             msg = "Корзина пуста"
-    return render_template('cart.html', msg=msg, sess_login=session)
+    return render_template('cart.html', msg=msg)
 
 
 # CHANGE COUNT PRODUCT IN CART
@@ -53,8 +53,9 @@ def change_count():
 
     check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
                                             where idOrder="{actual_order}"'''
-    total_count = f"Товары ({(execute_read_query(check_total_count)[0]['total_count'])})"
-
+    total_count = execute_read_query(check_total_count)[0]['total_count']
+    session['count_product_cart'] = total_count
+    # session['count_product_cart'] = total_count
     return json.dumps({'total_price': total_price, 'total_count': total_count})
 
 
@@ -73,6 +74,7 @@ def delete_product(product_id, color_id):
     empty_order = execute_read_query(check_empty_order)
 
     if empty_order == tuple():
+        del session['count_product_cart']
         drop_order = f'''DELETE FROM `orders` WHERE (`id` = '{actual_order}');'''
         execute_query(drop_order)
     return redirect(url_for('cart'))

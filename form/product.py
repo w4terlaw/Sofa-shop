@@ -1,5 +1,5 @@
 from flask import render_template, request, session
-from database.operations import execute_read_query, execute_query
+from database.extension import execute_read_query, execute_query
 
 
 # PRODUCT PAGE
@@ -45,7 +45,10 @@ def product_info(id, color_id):
                                 VALUES ('{id_actual_order}', '{id}', '1', '{color_id}');'''
                 execute_query(insert_product)
                 product_in_order = True
+                check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
+                                                            where idOrder="{id_actual_order}"'''
+                total_count = execute_read_query(check_total_count)[0]['total_count']
+                session['count_product_cart'] = total_count
                 msg = 'Товар добавлен в корзину'
-    return render_template('product.html', pro_item=product_data, pro_pic=product_picture,
-                           sess_login=session, msg=msg, product_in_order=product_in_order,
+    return render_template('product.html', pro_item=product_data, pro_pic=product_picture, msg=msg, product_in_order=product_in_order,
                            color_id=color_id)

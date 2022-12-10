@@ -154,7 +154,7 @@
                         <!--                        &nbsp; &nbsp; &nbsp;-->
                         <!--                        <p><i class="bi bi-cart"></i></p>-->
 
-                        {%if sess_login.logged_in == true %}
+                        {%if session.logged_in == true %}
                         <div>
                             {% if product_in_order == True %}
                             <a href="/cart">

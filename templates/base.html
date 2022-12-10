@@ -25,6 +25,24 @@
     display:flex;
 }
 
+.cont{
+    text-align:center
+}
+.full_quantity {
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    height: 16px;
+    font-size: 12px;
+    line-height: 17px;
+    padding: 0 8px;
+    position: absolute;
+    margin-right: 10px;
+    margin-top: 5px;
+    right: 0;
+    top: 0;
+    background: linear-gradient(91.85deg,#ff5863 .1%,#eb212e 101.94%,#eb212e 0);
+}
 .count_cart {
   display: inline-block;
   position: relative;
@@ -82,6 +100,9 @@
 
 
 
+
+
+
 </style>
 
 <body>
@@ -105,7 +126,7 @@
                         <form action="/search/">
                             <input type="text" name="text" id="text_search" class="form-control form-input"
                                    placeholder="Поиск...">
-                                <input type="submit" hidden/>
+                            <input type="submit" hidden/>
                         </form>
                         <span class="left-pan"><i class="fa fa-microphone"></i></span>
                     </li>
@@ -122,9 +143,14 @@
                         </a>
                     </li>
                     <li>
-                        <a style="color:#001a34;" href="/cart" class="nav-link">
+                        <a style="color:#001a34; position:relative" href="/cart" class="nav-link">
                             <div style="text-align:center">
-<!--                                <div class="count_cart"><span class="span"></span><span class=text>1</span></div>-->
+                                {%if session.count_product_cart is defined%}
+                                <div class="cont">
+                                    <div id="product_count" class="full_quantity"><p class="v-catalog-full_quantity_count">{{session.count_product_cart}}</p></div>
+                                </div>
+                                {%endif%}
+                                <!--                                <div class="count_cart"><span class="span"></span><span class=text>1</span></div>-->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                      class="bi bi-bag-fill" viewBox="0 0 16 16">
 
@@ -134,7 +160,7 @@
                             <div style="font-size:14px">Корзина</div>
                         </a>
                     </li>
-                    {%if sess_login.logged_in == true %}
+                    {%if session.logged_in == true %}
                     <li>
                         <a href="/exit" style="color:#001a34;" class="nav-link">
                             <div style="text-align:center; float:center">
@@ -149,7 +175,7 @@
                                 <!--                                <circle cx="12" cy="7" r="4"/>-->
                                 <!--                            </svg>-->
                             </div>
-                            <div style="margin-top: -2px;font-size:14px">{{sess_login.first_name}}</div>
+                            <div style="margin-top: -2px;font-size:14px">{{session.first_name}}</div>
                         </a>
                     </li>
                 </ul>
@@ -180,58 +206,6 @@
         </div>
     </div>
 </header>
-<!--<header style="position: sticky; top: 0; z-index:1" class="p-3 bg-dark mb-4 text-white">-->
-<!--    <div class="container">-->
-<!--        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">-->
-<!--            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">-->
-<!--                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">-->
-<!--                    <use xlink:href="#bootstrap"></use>-->
-<!--                </svg>-->
-<!--            </a>-->
-
-<!--            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">-->
-<!--                <li><a href="/" class="nav-link px-2 text-secondary">Главная</a></li>-->
-<!--                <li><a href="#" class="nav-link px-2 text-white">Мебель</a></li>-->
-<!--                &lt;!&ndash;                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>&ndash;&gt;-->
-<!--                &lt;!&ndash;                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>&ndash;&gt;-->
-<!--                <li><a href="#" class="nav-link px-2 text-white">О нас</a></li>-->
-<!--            </ul>-->
-
-<!--            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">-->
-<!--                <input type="search" class="form-control form-control-dark" placeholder="Search..."-->
-<!--                       aria-label="Search">-->
-<!--            </form>-->
-<!--            <a style="text-decoration: none" href="/cart">-->
-<!--                <button type="button" class="btn btn-warning">-->
-<!--                <span style=" align-items:center;" class="menu-icon">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
-<!--                     class="bi bi-cart-fill" viewBox="0 0 16 16">-->
-<!--                  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>-->
-<!--                </svg>-->
-<!--                </span>-->
-<!--                </button>&nbsp;&nbsp;&nbsp;-->
-<!--            </a>-->
-<!--            {%if sess_login == true %}-->
-<!--            <div class="text-end">-->
-<!--                &lt;!&ndash;                <button type="button" class="btn btn-outline-light me-2">Регистрация</button>&ndash;&gt;-->
-<!--                <a href="/exit">-->
-<!--                    <button type="button" class="btn btn-warning">Выйти</button>-->
-<!--                </a>-->
-
-
-<!--            </div>-->
-<!--            {%else%}-->
-<!--            <div class="text-end">-->
-<!--                &lt;!&ndash;                <button type="button" class="btn btn-outline-light me-2">Регистрация</button>&ndash;&gt;-->
-<!--                <a href="/login">-->
-<!--                    <button type="button" class="btn btn-warning">Войти</button>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            {%endif%}-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--</header>-->
 <br>
 {% block body %}{% endblock %}
 <div>

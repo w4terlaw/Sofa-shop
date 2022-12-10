@@ -17,6 +17,7 @@ def create_connection(host, user, password, db):
 
 
 create_connection('localhost', 'root', 'root', 'sofa_shop')
+
 # create_connection('waterlaw1.mysql.pythonanywhere-services.com', 'waterlaw1', 'elmir2022','waterlaw1$sofa_shop')
 
 mysql.init_app(app)
