@@ -1,15 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_mysqldb import MySQL
-import MySQLdb
-import mysql.connector
+from flask_mysqldb import MySQL, MySQLdb
 
-app = Flask(__name__)
-mysql = MySQL(app)
-
+mysql = MySQL()
 
 
 # Read DB
-def execute_read_query(connection, query):
+def execute_read_query(query):
     cursor = mysql.connection.cursor()
     result = None
     try:
@@ -27,7 +22,7 @@ def execute_read_query(connection, query):
 
 
 # Write DB
-def execute_query(connection, query):
+def execute_query(query):
     cursor = mysql.connection.cursor()
     try:
         cursor.execute(query)

@@ -25,6 +25,30 @@
     display:flex;
 }
 
+.count_cart {
+  display: inline-block;
+  position: relative;
+}
+
+.span {
+
+  display: inline-block;
+  background: #ccc;
+  color: #000;
+  text-align: center;
+  border-radius: 50%;
+  padding: 50% 0;
+  width: 100%;
+  position: absolute;
+  transform: translateY(-50%);
+}
+
+.text {
+  position: relative;
+  top: -.7em;
+  padding: 0em 0.65em;
+}
+
 .form_search .fa-search{
     background-color:white;
     text-align:center;
@@ -100,8 +124,10 @@
                     <li>
                         <a style="color:#001a34;" href="/cart" class="nav-link">
                             <div style="text-align:center">
+<!--                                <div class="count_cart"><span class="span"></span><span class=text>1</span></div>-->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                      class="bi bi-bag-fill" viewBox="0 0 16 16">
+
                                     <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>
                                 </svg>
                             </div>
