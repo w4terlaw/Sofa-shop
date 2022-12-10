@@ -11,10 +11,100 @@
     window.history.replaceState( null, null, window.location.href );
     }
 
+
+
+
+
+
+
+
+
+
 </script>
 
-<div>
-Результат поиска {{search_value}}
+<div class="container">
+    <div style="padding: 0 24px 20px 0;">
+        {%if session.search_pro_count>0%}
+            <span style="col">По запросу <strong>{{search_value}}</strong>
+                {%if session.search_pro_count>1%}
+                найдено {{session.search_pro_count}} товара
+                {%else%}
+                найден {{session.search_pro_count}} товар
+                {%endif%}
+            </span>
+        {%else%}
+            <span>По вашему запросу товаров сейчас нет</span>
+        {%endif%}
+    </div>
+
+
+    <div class="product-main">
+        <!--            <h2 class="title">Мебель</h2>-->
+        <div class="product-grid">
+            {%for product in products%}
+
+            <div class="showcase bg-light">
+                <div class="showcase-banner">
+                    <a style="text-decoration:none;font-size:16px;font-weight: 600;color: var(--bs-gray-dark)"
+                       href="/product/{{product.id}}/{{product.color_id}}">
+                        <img style="" src="{{product.picture}}" alt="MEN Yarn Fleece Full-Zip Jacket"
+                             class="product-img default"
+                             width="300">
+                        <img style="" src="{{product.picture}}" alt="MEN Yarn Fleece Full-Zip Jacket"
+                             class="product-img hover"
+                             width="300">
+                    </a>
+
+                    <div class="showcase-actions">
+                        <button title="Добавить в избранные"
+                                style="display:flex; align-items:center;justify-content:center" class="btn-action">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-bag-heart-fill" viewBox="0 0 16 16">
+                                <path d="M11.5 4v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5ZM8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1Zm0 6.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+                            </svg>
+                        </button>
+                        <!--                            <button title="Добавить в корзину"-->
+                        <!--                                    style="display:flex; align-items:center;justify-content:center" class="btn-action">-->
+                        <!--                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"-->
+                        <!--                                     class="bi bi-bag-fill" viewBox="0 0 16 16">-->
+                        <!--                                    <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>-->
+                        <!--                                </svg>-->
+                        <!--                            </button>-->
+                    </div>
+                </div>
+
+                <div class="showcase-content">
+                    <!--                        <a href="#" class="showcase-category">Нет в наличии</a>-->
+                    <a style="text-decoration:none;font-size:16px;font-weight: 600;color: var(--bs-gray-dark)"
+                       href="/product/{{product.id}}/{{product.color_id}}">{{product.title}}</a>
+
+                    <div class="showcase-rating">
+                        <!--                            <p>Срок годности: 30.09.2024</p>-->
+
+                        <!--                            <div class="delivery">-->
+                        <!--                                <i class="fi fi-rr-home"></i>-->
+                        <!--                                <p>Самовывоз</p>-->
+
+                        <!--                            </div>-->
+
+                        <div class="price-box">
+                            <p style="margin-top:6px;font-size:20px;font-weight: 600;color: var(--bs-gray-700)"
+                               class="">{{product.price}} ₽</p>
+                        </div>
+
+                        <!--                            <button>-->
+                        <!--                                Добавить в корзину-->
+                        <!--                            </button>-->
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {%endfor%}
+        </div>
+    </div>
 </div>
 
 {% endblock %}

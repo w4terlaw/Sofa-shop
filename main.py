@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, json, g
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, json, make_response
 from flask_mysqldb import MySQL, MySQLdb
 import re
 import datetime
 from passlib.hash import sha256_crypt
-from functools import wraps
 
 from db_CRUD import execute_read_query, execute_query
 
@@ -39,26 +38,8 @@ connect_db = create_connection('localhost', 'root', 'root', 'sofa_shop')
 #                                'waterlaw1$sofa_shop')
 
 
-# Search decorator
-def search(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if request.args.get('search_value'):
-            value = request.args.get('search_value')
-            check_sql = f'''SELECT id, color_id, picture, product.title, product.price, color_id 
-                        FROM product, product_has_color where count>0 
-                        and product_has_color.product_id = product.id and product.title LIKE "%{value}%" group by id'''
-            products = execute_read_query(connect_db, check_sql)
-            print(products)
-            return render_template('search.html', sess_login=session, search_value=value, products=products)
-        return f(*args, **kwargs)
-
-    return decorated_function
-
-
-# Login
+# HOME
 @app.route('/')
-@search
 def home():
     check_sql = f'''SELECT id, color_id, picture, product.title, product.price, color_id
                 FROM product, product_has_color where count>0 
@@ -67,8 +48,8 @@ def home():
     return render_template('home.html', products=products, sess_login=session)
 
 
+# PRODUCT PAGE
 @app.route("/product/<int:id>/<int:color_id>", methods=['GET', 'POST'])
-@search
 def product(id, color_id):
     product_in_order = None
     msg = ''
@@ -81,10 +62,7 @@ def product(id, color_id):
                            and color.id=product_has_color.color_id and product_has_material.material_id = material.id
                            and product_has_material.product_id = product.id and product.id="{id}" and color_id = "{color_id}"'''
     product_data = execute_read_query(connect_db, check_info_product)
-    if product_data == tuple():
-        return '<h1>Invalid link</h1>'
-    else:
-        product_data = product_data[0]
+    product_data = product_data[0]
     check_picture_product = f'''Select product.id, color.id as color_id, picture from type, product, color, product_has_color
                             Where product.id=product_has_color.product_id 
                             and color.id=product_has_color.color_id
@@ -124,8 +102,8 @@ def product(id, color_id):
                            color_id=color_id)
 
 
+# PRODUCTS CART
 @app.route("/cart")
-@search
 def cart():
     msg = ''
     if session.get('logged_in'):
@@ -155,6 +133,20 @@ def cart():
     return render_template('cart.html', msg=msg, sess_login=session)
 
 
+# SEARCH PRODUCT
+@app.route('/search/')
+def search():
+    if request.args.get('text'):
+        value = request.args.get('text')
+        check_sql = f'''SELECT id, color_id, picture, product.title, product.price, color_id 
+                        FROM product, product_has_color where count>0 
+                        and product_has_color.product_id = product.id and product.title LIKE "%{value}%" group by id'''
+        products = execute_read_query(connect_db, check_sql)
+        session['search_pro_count'] = len(products)
+        return render_template('search.html', sess_login=session, search_value=value, products=products)
+
+
+# CHANGE COUNT PRODUCT IN CART
 @app.route('/change_count')
 def change_count():
     check_actual_order = f'''SELECT id FROM orders
@@ -179,6 +171,7 @@ def change_count():
     return json.dumps({'total_price': total_price, 'total_count': total_count})
 
 
+# DELETE PRODUCT IN CART
 @app.route("/cart/delete_product/<int:product_id>/<int:color_id>")
 def delete_product(product_id, color_id):
     check_actual_order = f'''SELECT id FROM orders
@@ -198,11 +191,13 @@ def delete_product(product_id, color_id):
     return redirect(url_for('cart'))
 
 
+# CLEAR CART
 @app.route('/cart_clear')
 def cart_clear():
     pass
 
 
+# ACCOUNT LOGOUT
 @app.route("/exit")
 def exit_account():
     session.clear()
@@ -210,6 +205,7 @@ def exit_account():
     return redirect(session.get('request'))
 
 
+# REGISTRATION
 @app.route('/reg', methods=['GET', 'POST'])
 def reg():
     msg = ''
@@ -242,7 +238,7 @@ def reg():
     return render_template('registration.html', msg=msg)
 
 
-# Registration
+# LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     # print(request.url_root + 'login')
@@ -279,6 +275,9 @@ def login():
                 msg = 'Неверный никнейм или пароль.'
     return render_template('login.html', msg=msg)
 
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 if __name__ == '__main__':
     app.run(debug=True)

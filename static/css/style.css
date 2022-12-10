@@ -1032,6 +1032,8 @@ h1:hover {
   position: relative;
 }
 
+
+
 .product-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1051,6 +1053,7 @@ h1:hover {
 .product-grid .showcase-banner { position: relative; }
 
 .product-grid .product-img {
+
   width: 100%;
   height: 100%;
   object-fit: cover;
