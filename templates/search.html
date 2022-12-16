@@ -1,26 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}
-Корзина
+{{search_value}} — найдено {{session.search_pro_count}}
 {% endblock %}
 
 {% block body %}
 
-<script>
-    if ( window.history.replaceState ) {
-    window.history.replaceState( null, null, window.location.href );
-    }
-
-
-
-
-
-
-
-
-
-
-</script>
+<!--<script>-->
+<!--    if ( window.history.replaceState ) {-->
+<!--    window.history.replaceState( null, null, window.location.href );-->
+<!--    }-->
+<!--</script>-->
 
 <div class="container">
     <div style="padding: 0 24px 20px 0;">
