@@ -1,178 +1,208 @@
 {% extends "base.html" %}
 
 {% block title %}
-Корзина
+    Корзина
 {% endblock %}
 
 {% block body %}
 
-<div class="container w-75">
-    <div>
-        {%if session.logged_in == true %}
+    <div class="container">
+        <div>
+            {% if session.logged_in == true %}
 
-        {%if products_in_cart is defined %}
-        <!--        <div style="color:#001a34; font-size:28px; font-weight: 700;">Корзина</div>-->
+                {% if products_in_cart is defined %}
+                    <!--        <div style="color:#001a34; font-size:28px; font-weight: 700;">Корзина</div>-->
 
-        <div class="cart_pay">
-            <div>
-                {%for pro_cart in products_in_cart %}
-                <div class="ll">
+                    <div class="cart_pay">
+                        <div>
+                            {% for pro_cart in products_in_cart %}
+                                <div class="ll">
 
-                    <div class="ln">
-                        <div class="mb">
-                            <div class="me">
-                                <a href="">
-                                    <img style="height: 100%; width: 100%; float:left" src="{{pro_cart.picture}}"
-                                         alt=" ">
-                                </a>
-                            </div>
+                                    <div class="ln">
+                                        <div class="mb">
+                                            <div class="me">
+                                                <a href="/product/{{pro_cart.id}}/{{pro_cart.color_id}}">
+                                                    <img style="height: 100%; width: 100%;"
+                                                         src="{{pro_cart.picture}}"
+                                                         alt=" ">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex">
+                                            <div>
+                                                <a style="text-decoration:none;color: #001a34;font-size:18px"
+                                                   href="">{{ pro_cart.title }}</a>
+
+                                                <div>
+                                                    <span style="color: #707f8d;" class="mb-2">Цвет:</span>
+                                                    <span> {{ pro_cart.color }}</span>
+                                                </div>
+                                                <div style="font-size:26px;font-weight: 600;">{{ pro_cart.price }} ₽
+                                                </div>
+                                                <span>Количество:</span>
+                                                <input id="{{ pro_cart.product_id }}" onchange="change_count(this)"
+                                                       style="width:95.5px"
+                                                       type="number" min="1" max="20"
+                                                       class="form-control" name="{{ pro_cart.color_id }}"
+                                                       value="{{ pro_cart.count }}"
+                                                       size="2"/>
+                                                <!--                            <div id="len"></div>-->
+
+                                                <script>
+                                                    function change_count(sel) {
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            url: "{{ url_for('change_count') }}",
+                                                            <!--                                    contentType: 'application/json',-->
+                                                            data: {
+                                                                product_id: sel.id,
+                                                                color_id: sel.name,
+                                                                pro_count: sel.value
+                                                            },
+                                                            success: function (response) {
+                                                                var json = jQuery.parseJSON(response)
+                                                                $('#total_price').html(json.total_price)
+                                                                $('#total_count').html('Товары (' + json.total_count + ')')
+                                                                $('#product_count').html(json.total_count)
+                                                                console.log(response);
+                                                            },
+                                                            error: function (error) {
+                                                                console.log(error);
+                                                            }
+                                                        });
+                                                    }
+
+
+                                                </script>
+                                                <br>
+
+                                            </div>
+                                            <div style="position:absolute; right:0; bottom:0">
+{#                                            <div style="margin-left: auto; margin-right: 0;">#}
+                                                <a style="color:#FF4747; text-decoration:none;"
+                                                   href="{{ url_for('.delete_product', product_id=pro_cart.product_id, color_id=pro_cart.color_id ) }}">
+{#                                                    <button type="button" class="btn btn-sm btn-danger">#}
+                                                    <span style="display:flex; align-items:center;"></span>
+{#                                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"#}
+{#                                                         fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0#}
+{#                                                            16 16">#}
+{#                                                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>#}
+{#                                                    </svg>#}
+                                                    Удалить
+{#                                                        </button>#}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
                         </div>
-                        <div style="display:flex-column">
-                            <a style="text-decoration:none; color: black;color: #001a34;font-size:18px" href="">{{pro_cart.title}}</a>
-
-                            <div>
-                                <span style="color: #707f8d;" class="mb-2">Цвет:</span>
-                                <span> {{pro_cart.color}}</span>
-                            </div>
-                            <div style="font-size:26px;font-weight: 600;">{{pro_cart.price}} ₽</div>
-                            <span>Количество:</span>
-                            <input id="{{pro_cart.product_id}}" onchange="change_count(this)" style="width:95.5px"
-                                   type="number" min="1" max="20"
-                                   class="form-control" name="{{ pro_cart.color_id }}" value="{{pro_cart.count}}"
-                                   size="2"/>
-                            <!--                            <div id="len"></div>-->
-
-                            <script>
-                                function change_count(sel) {
-                                    $.ajax({
-                                    type: "GET",
-                                    url: "{{ url_for('change_count') }}",
-<!--                                    contentType: 'application/json',-->
-                                    data: {product_id: sel.id, color_id:sel.name, pro_count:sel.value},
-                                    success: function(response) {
-                                        var json = jQuery.parseJSON(response)
-                                        $('#total_price').html(json.total_price)
-                                        $('#total_count').html('Товары ('+ json.total_count +')')
-                                        $('#product_count').html(json.total_count)
-                                        console.log(response);
-                                    },
-                                    error: function(error) {
-                                        console.log(error);
-                                    }
-                                });
-                                }
-
-
-
-
-                            </script>
-                            <br>
-                            <div>
-                                <button style="position:absolute; right:0; top:0">
-                                    <a style="color:#FF4747; text-decoration:none"
-                                       href="{{ url_for('.delete_product', product_id=pro_cart.product_id, color_id=pro_cart.color_id )}}">
-<!--                                        <span style="display:flex; align-items:center;"></span>-->
-<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"-->
-<!--                                             fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">-->
-<!--                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>-->
-<!--                                        </svg>-->
-                                        Удалить
-                                    </a>
+                        <div>
+                            <div style="position: sticky; top: 104px;" class="payment">
+                                <div style="font-size:20px;font-weight: 600;">Ваша корзина</div>
+                                <div id="total_count">Товары ({{ total_count }})</div>
+                                <hr>
+                                <span>
+                        <span style="font-size:20px;font-weight: 600; ">Общая стоимость</span>
+                        <span style="font-size:20px;font-weight: 600; display:block; float:right"
+                              id="total_price">{{ total_price }}</span>
+                    </span>
+                                <p></p>
+                                <button style="background-color:var(--bs-primary); color:white;" class="btn w-100">
+                                    Перейти к оформлению
                                 </button>
                             </div>
+
                         </div>
 
                     </div>
-
-                </div>
-
-                {%endfor%}
-
-            </div>
-            <div>
-                <div style="position: sticky; top: 104px;" class="payment">
-                    <div style="font-size:20px;font-weight: 600;">Ваша корзина</div>
-                    <div id="total_count">Товары ({{total_count}})</div>
-                    <hr>
-                    <span>
-                        <span style="font-size:20px;font-weight: 600; ">Общая стоимость</span>
-                        <span style="font-size:20px;font-weight: 600; display:block; float:right" id="total_price">{{total_price}}</span>
-                    </span>
+                {% else %}
+                    <div style="color:#001a34; font-size:28px; font-weight: 700; text-align:center">Корзина пуста</div>
                     <p></p>
-                    <button style="background-color:var(--bs-primary); color:white;" class="btn w-100">Перейти к оформлению</button>
-                </div>
-
-            </div>
-
-        </div>
-        {%else%}
-        <div style="color:#001a34; font-size:28px; font-weight: 700; text-align:center">Корзина пуста</div>
-        <p></p>
-        <div style="color:#001a34; text-align:center">Воспользуйтесь поиском, чтобы найти что вам нужно</div>
-        {%endif%}
-        {%else%}
-        <div class="out_login">
-            <div style="color:#001a34; font-size:28px; font-weight: 700;">Корзина пуста</div>
-            <p></p>
-            <div>
+                    <div style="color:#001a34; text-align:center">Воспользуйтесь поиском, чтобы найти что вам нужно
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="out_login">
+                    <div style="color:#001a34; font-size:28px; font-weight: 700;">Корзина пуста</div>
+                    <p></p>
+                    <div>
                 <span>
                     Если в корзине были товары –
                     <a style="text-decoration:none;" href="{{ url_for('login') }}">войдите</a>
                     , чтобы посмотреть список.
                 </span>
-            </div>
+                    </div>
+                </div>
+            {% endif %}
+
         </div>
-        {%endif%}
-
     </div>
-</div>
 
-<style>
+    <style>
+        @media (max-width: 750px) {
+            .cart_pay {
+                grid-template-columns: 1fr !important;
+            }
 
-.out_login{
-    text-align:center;
-}
-.ll{
-    border: none;
-    border-radius:12px;
-    box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%);
-    margin-bottom: 20px;
-    padding: 20px;
-}
+            .ln {
+                flex-direction:column;
+                align-items: center;
+            {#width: 90% #}
+            }
 
-.ln{
-    display: flex;
-    position:relative;
-}
+            .product-box {
+                width: 100%
+            }
 
-.ll .me {
-    height: 100%;
-    margin-right: 20px;
-    max-height: 200px;
-    max-width: 200px;
-    min-height: 200px;
-    min-width: 200px;
-    position: relative;
-    width: 100%;
-}
+        }
 
-.cart_pay{
-    display:grid;
-    grid-template-columns: 3fr 1fr ;
-    grid-column-gap: 20px;
+        .out_login {
+            text-align: center;
+        }
 
-}
-.payment{
-    padding:20px;
-    border: none;
-    border-radius:12px;
-    min-width: 300px;
-    width:400px;
-    box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%);
-}
+        .ll {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .ln {
+            display: flex;
+            position: relative;
+        }
+
+        .ll .me {
+            height: 100%;
+            margin-right: 20px;
+            max-height: 200px;
+            max-width: 200px;
+            min-height: 200px;
+            min-width: 200px;
+            width: 100%;
+
+        }
+
+        .cart_pay {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            grid-column-gap: 20px;
+        }
+
+        .payment {
+            padding: 20px;
+            border: none;
+            border-radius: 12px;
+            {#max-width: 300px;#}
+            {#min-width: 400px;#}
+            box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%);
+        }
 
 
-
-
-</style>
+    </style>
 {% endblock %}
