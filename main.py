@@ -36,21 +36,20 @@ app.add_url_rule('/', view_func=home.home)
 app.add_url_rule('/product/<int:id>/<int:color_id>', methods=['GET', 'POST'], view_func=product.product_info)
 
 # CART
-app.add_url_rule('/cart', view_func=cart.cart)
+app.add_url_rule('/cart', methods=['GET', 'POST'], view_func=cart.cart)
 app.add_url_rule('/change_count', view_func=cart.change_count)
-app.add_url_rule('/cart/delete_product/<int:product_id>/<int:color_id>', view_func=cart.delete_product)
 app.add_url_rule('/cart_clear', view_func=cart.cart_clear)
 
 # SEARCH
 app.add_url_rule('/search/', view_func=search.search)
 
 # ADMIN PANEL
-app.add_url_rule('/admin_panel', view_func=admin_panel.admin_panel)
+app.add_url_rule('/admin', view_func=admin_panel.admin)
 
 
-# app.add_url_rule('/admin_panel/redact', view_func=admin_panel.search)
-# app.add_url_rule('/admin_panel/del', view_func=admin_panel.search)
-# app.add_url_rule('/admin_panel/add', view_func=admin_panel.search)
+# app.add_url_rule('/admin/redact', view_func=admin_panel.search)
+# app.add_url_rule('/admin/del/<int:product_id>', view_func=admin_panel.search)
+# app.add_url_rule('/admin/add', view_func=admin_panel.search)
 
 
 @app.errorhandler(404)

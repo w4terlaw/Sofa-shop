@@ -1,273 +1,270 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{pro_item.title}}
+    {{ pro_item.title }}
 {% endblock %}
 {% block body %}
-<style>
-@media screen and (max-width: 1000px) {
-    .product-list {
-        flex-direction:column;
-    }
-    .w-75{
-        width: 90% !important;
-    }
-    .product-box{
-        width:100%
-    }
+    <style>
+        @media screen and (max-width: 1000px) {
+            .product-list {
+                flex-direction: column;
+            }
 
-}
-.img-wrap{
-    max-width: 600px;
-    min-width: 300px;
-    position: relative;
-    margin: 20px 20px 0 0;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: center;
-    transition: opacity .3s;
-}
-.img-wrap img{
-    object-fit: cover;
-    width: 80%;
-    height: 50%;
-<!--    margin: -20% 0 -10% 0;-->
-}
+            .w-75 {
+                width: 90% !important;
+            }
 
-.product-list{
-    display:flex;
-    align-items:center;
-    justify-content: center
-}
+            .product-box {
+                width: 100%
+            }
 
+        }
 
+        .img-wrap {
+            max-width: 600px;
+            min-width: 300px;
+            position: relative;
+            margin: 20px 20px 0 0;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            transition: opacity .3s;
+        }
 
+        .img-wrap img {
+            object-fit: cover;
+            width: 80%;
+            height: 50%;
+        <!-- margin: - 20 % 0 - 10 % 0;
+        -->
+        }
 
-
-
-
+        .product-list {
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
 
 
+    </style>
 
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
 
+    </script>
 
-
-</style>
-
-<script>
-    if ( window.history.replaceState ) {
-    window.history.replaceState( null, null, window.location.href );
-    }
-
-</script>
-
-<div class="container">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <div class="section product-header">
-        <div class="columns">
-            <div class="column">
-                <a style="text-decoration:none" href="/">
-                    <button type="button" class="btn btn-sm btn-light">
-                        <!--                <a style="text-decoration: none" href="/">-->
-                        <!--                    <button type="button" class="btn btn-sm btn-light">-->
-                        <span style="display: flex; align-items:center;" class="menu-icon">
+    <div class="container">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <div class="section product-header">
+            <div class="columns">
+                <div class="column">
+                    <a style="text-decoration:none" href="/">
+                        <button type="button" class="btn btn-sm btn-light">
+                            <!--                <a style="text-decoration: none" href="/">-->
+                            <!--                    <button type="button" class="btn btn-sm btn-light">-->
+                            <span style="display: flex; align-items:center;" class="menu-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
                                   d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                         </svg>
                         </span>
-                    </button>&nbsp;
-                </a>
-                <!--                </a>-->
-                <span class="title is-4 has-text-muted">{{pro_item.type_title}}</span>
-                <span class="title is-3 has-text-muted">|</span>
-                <span class="title is-3">{{pro_item.title}}</span>
+                        </button>&nbsp;
+                    </a>
+                    <!--                </a>-->
+                    <span class="title is-4 has-text-muted">{{ pro_item.type_title }}</span>
+                    <span class="title is-3 has-text-muted">|</span>
+                    <span class="title is-3">{{ pro_item.title }}</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="section">
-        <div class="columns">
-            <div class="column is-6">
-                <div class="product-list">
-                    <div style="z-index:-10;" class="img-wrap">
-                        <!--                        style="margin:0 20px 0 0; width: 400px; object-position: center center;"-->
-                        <img src="{{pro_item.picture}}" alt=" ">
-                    </div>
-                    <div style="    min-width: 320px;border: none; border-radius:12px; box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%); padding:20px"
-                         class="product-box">
+        <div class="section">
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="product-list">
+                        <div style="z-index:-10;" class="img-wrap">
+                            <!--                        style="margin:0 20px 0 0; width: 400px; object-position: center center;"-->
+                            <img src="{{ pro_item.picture }}" alt=" ">
+                        </div>
+                        <div style="    min-width: 320px;border: none; border-radius:12px; box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%); padding:20px"
+                             class="product-box">
                         <span style="text-decoration:none;font-size:20px;font-weight: 600;color: var(--bs-gray-dark)"
                               class="product-title mb-2">
-                                {{pro_item.title}}</span>
-                        <br>
-                        <!--                        <div class="title is-2">{{pro_item.title}}</div>-->
-                        <span style="font-size:26px;font-weight: 600;color: var(--bs-gray-700)">{{pro_item.price}} ₽</span>
-                        <br>
-                        <!--                        <p class="title is-3 has-text-muted">{{pro_item.price}} ₽ </p>-->
-                        <span>
+                                {{ pro_item.title }}</span>
+                            <br>
+                            <!--                        <div class="title is-2">{{pro_item.title}}</div>-->
+                            <span style="font-size:26px;font-weight: 600;color: var(--bs-gray-700)">{{ pro_item.price }} ₽</span>
+                            <br>
+                            <!--                        <p class="title is-3 has-text-muted">{{pro_item.price}} ₽ </p>-->
+                            <span>
                             <span style="color: #707f8d;" class="mb-2">Цвет:</span>
-                            <span> {{pro_item.color}}</span>
+                            <span> {{ pro_item.color }}</span>
                         </span>
-                        <p></p>
+                            <p></p>
 
 
-                        <!--                        $("select").imagepicker()-->
-                        <!--                        <select class="image-picker show-html">-->
-                        <div style="display:flex; margin-left: -5px">
-                            {%for item_pic in pro_pic %}
-                            <a href="/product/{{item_pic.id}}/{{item_pic.color_id}}">
-                                {% if item_pic.color_id == color_id %}
-                                <div style="border: 2px solid #6699FF !important; margin: 0 5px 0 5px; display: flex; width:105px; height:80px; align-items: center; justify-content:center"
-                                     class="border rounded-3">
-                                    <img style="z-index: -1; width:100px; margin:-10%" src="{{item_pic.picture}}"
-                                         alt=" ">
+                            <!--                        $("select").imagepicker()-->
+                            <!--                        <select class="image-picker show-html">-->
+                            <div style="display:flex; margin-left: -5px">
+                                {% for item_pic in pro_pic %}
+                                    <a href="/product/{{ item_pic.id }}/{{ item_pic.color_id }}">
+                                        {% if item_pic.color_id == color_id %}
+                                            <div style="border: 2px solid #6699FF !important; margin: 0 5px 0 5px; display: flex; width:105px; height:80px; align-items: center; justify-content:center"
+                                                 class="border rounded-3">
+                                                <img style="z-index: -1; width:100px; margin:-10%"
+                                                     src="{{ item_pic.picture }}"
+                                                     alt=" ">
+                                            </div>
+                                        {% else %}
+                                            <div style="display: flex; margin: 0 5px 0 5px; width:105px; height:80px; align-items: center; justify-content:center"
+                                                 class="border rounded-3">
+                                                <img style="z-index: -1; width:100px; margin:-10%"
+                                                     src="{{ item_pic.picture }}"
+                                                     alt=" ">
+                                            </div>
+                                        {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            <br>
+                            <!--                        <div>-->
+                            <!--                            <a style="text-decoration: none; color: black" href="#">-->
+                            <!--                                <button style='' class="btn btn-primary">-->
+                            <!--                                    <i class="fa fa-minus cart-icon"></i>-->
+                            <!--                                </button>-->
+                            <!--                            </a>-->
+                            <!--                            &nbsp;-->
+                            <!--                            <input type="text" name="" class="input has-text-centered" value="1" style="width:40px;">-->
+                            <!--                            &nbsp;-->
+                            <!--                            <a style="text-decoration: none; color: black" href="#">-->
+                            <!--                                <button style='' class="btn btn-primary">-->
+                            <!--                                    <i class="fa fa-plus cart-icon"></i>-->
+                            <!--                                </button>-->
+
+                            <!--                            </a>-->
+                            <!--                        </div>-->
+                            <!--                        &nbsp; &nbsp; &nbsp;-->
+                            <!--                        <p><i class="bi bi-cart"></i></p>-->
+
+                            {% if session.logged_in == true %}
+                                <div>
+                                    {% if product_in_order == True %}
+                                        <a href="/cart">
+                                            <button type="button" title="Требуется вход"
+                                                    class="w-100 btn btn-primary">
+                                                Перейти в корзину <br/>
+                                            </button>
+                                        </a>
+
+
+                                    {% else %}
+                                        <form method="POST">
+                                            <button type="submit" class="btn btn-danger w-100">В корзину</button>
+                                        </form>
+                                        <!--                                                    <p id="text_info" style="text-align: center" class="mt-3">{{msg}}</p>-->
+                                    {% endif %}
                                 </div>
-                                {%else%}
-                                <div style="display: flex; margin: 0 5px 0 5px; width:105px; height:80px; align-items: center; justify-content:center"
-                                     class="border rounded-3">
-                                    <img style="z-index: -1; width:100px; margin:-10%" src="{{item_pic.picture}}"
-                                         alt=" ">
-                                </div>
-                                {%endif%}
-                            </a>
-                            {%endfor%}
-                        </div>
-                        <br>
-                        <!--                        <div>-->
-                        <!--                            <a style="text-decoration: none; color: black" href="#">-->
-                        <!--                                <button style='' class="btn btn-primary">-->
-                        <!--                                    <i class="fa fa-minus cart-icon"></i>-->
-                        <!--                                </button>-->
-                        <!--                            </a>-->
-                        <!--                            &nbsp;-->
-                        <!--                            <input type="text" name="" class="input has-text-centered" value="1" style="width:40px;">-->
-                        <!--                            &nbsp;-->
-                        <!--                            <a style="text-decoration: none; color: black" href="#">-->
-                        <!--                                <button style='' class="btn btn-primary">-->
-                        <!--                                    <i class="fa fa-plus cart-icon"></i>-->
-                        <!--                                </button>-->
 
-                        <!--                            </a>-->
-                        <!--                        </div>-->
-                        <!--                        &nbsp; &nbsp; &nbsp;-->
-                        <!--                        <p><i class="bi bi-cart"></i></p>-->
-
-                        {%if session.logged_in == true %}
-                        <div>
-                            {% if product_in_order == True %}
-                            <a href="/cart">
-                                <button type="button" title="Требуется вход"
-                                        class="w-100 btn btn-primary">
-                                    Перейти в корзину <br/>
+                            {% else %}
+                                <button disabled type="button" title="Требуется вход" class="btn btn-danger w-100">В
+                                    корзину
                                 </button>
-                            </a>
+                                <p style="text-align: center;color: #707f8d;" class="mt-3">Требуется вход в аккаунт</p>
 
-
-                            {%else%}
-                            <form method="POST">
-                                <button type="submit" class="btn btn-danger w-100">В корзину</button>
-                            </form>
-                            <!--                                                    <p id="text_info" style="text-align: center" class="mt-3">{{msg}}</p>-->
-                            {%endif%}
+                            {% endif %}
                         </div>
-
-                        {%else%}
-                        <button disabled type="button" title="Требуется вход" class="btn btn-danger w-100">В корзину
-                        </button>
-                        <p style="text-align: center;color: #707f8d;" class="mt-3">Требуется вход в аккаунт</p>
-
-                        {%endif%}
                     </div>
                 </div>
-            </div>
-            <div style="" class="column is-5 is-offset-1">
-                <br>
-                <h3 style="font-size:22px;" class="sidebar-title">Описание</h3>
-                <p>{{pro_item.description}}</p>
-                <!--                <br>-->
+                <div style="" class="column is-5 is-offset-1">
+                    <br>
+                    <h3 style="font-size:22px;" class="sidebar-title">Описание</h3>
+                    <p>{{ pro_item.description }}</p>
+                    <!--                <br>-->
 
-                <!--                <br>-->
-                <!--                <div>-->
-                <!--                    <div>-->
-                <!--                        <div>-->
-                <!--                            <ul>-->
-                <!--                                <li><a>Общий размер - {{pro_item.overall}}</a></li>-->
-                <!--                                <li><a>Cиденье - {{pro_item.seat}}</a></li>-->
-                <!--                            </ul>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
-                <div>
-<!--                    <h3 style="font-size:20px;font-weight: 600;" class="mb-3 ">Характеристики</h3>-->
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <strong>Артикул</strong>
-                            </td>
-                            <td>{{pro_item.pro_id}}</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Страна</span>
-                            </td>
-                            <td>{{pro_item.country}}</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Материал</span>
-                            </td>
-                            <td>{{pro_item.full_material}}</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Общий размер</span>
-                            </td>
-                            <td>{{pro_item.overall}}</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>Размер сиденья</span>
-                            </td>
-                            <td>{{pro_item.seat}}</td>
-                        </tr>
+                    <!--                <br>-->
+                    <!--                <div>-->
+                    <!--                    <div>-->
+                    <!--                        <div>-->
+                    <!--                            <ul>-->
+                    <!--                                <li><a>Общий размер - {{pro_item.overall}}</a></li>-->
+                    <!--                                <li><a>Cиденье - {{pro_item.seat}}</a></li>-->
+                    <!--                            </ul>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                    <div>
+                        <!--                    <h3 style="font-size:20px;font-weight: 600;" class="mb-3 ">Характеристики</h3>-->
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong>Артикул</strong>
+                                </td>
+                                <td>{{ pro_item.pro_id }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Страна</span>
+                                </td>
+                                <td>{{ pro_item.country }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Материал</span>
+                                </td>
+                                <td>{{ pro_item.full_material }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Общий размер</span>
+                                </td>
+                                <td>{{ pro_item.overall }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Размер сиденья</span>
+                                </td>
+                                <td>{{ pro_item.seat }}</td>
+                            </tr>
 
+                            <!--                    <tr>-->
+                            <!--                        <td class="has-text-right">-->
+                            <!--                            <strong>Views</strong>-->
+                            <!--                        </td>-->
+                            <!--                        <td>3</td>-->
+                            <!--                    </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--                <table class="table">-->
+                    <!--                    <thead>-->
+                    <!--                    <tr>-->
+                    <!--                        <th>Студент</th>-->
+                    <!--                        <th>Страна</th>-->
+                    <!--                        <th>Время сканирования</th>-->
+                    <!--                    </tr>-->
+                    <!--                    </thead>-->
+
+                    <!--                    <tbody>-->
+                    <!--                    {% for student in students %}-->
                         <!--                    <tr>-->
-                        <!--                        <td class="has-text-right">-->
-                        <!--                            <strong>Views</strong>-->
-                        <!--                        </td>-->
-                        <!--                        <td>3</td>-->
+                        <!--                        <td>{{student.student}}</td>-->
+                        <!--                        <td>{{pro_item.country}}</td>-->
+                        <!--                        <td>{{student.date}}</td>-->
                         <!--                    </tr>-->
-                        </tbody>
-                    </table>
+                        <!--                    {% endfor %}-->
+                    <!--                    </tbody>-->
+
+                    <!--                </table>-->
+
                 </div>
-                <!--                <table class="table">-->
-                <!--                    <thead>-->
-                <!--                    <tr>-->
-                <!--                        <th>Студент</th>-->
-                <!--                        <th>Страна</th>-->
-                <!--                        <th>Время сканирования</th>-->
-                <!--                    </tr>-->
-                <!--                    </thead>-->
-
-                <!--                    <tbody>-->
-                <!--                    {% for student in students %}-->
-                <!--                    <tr>-->
-                <!--                        <td>{{student.student}}</td>-->
-                <!--                        <td>{{pro_item.country}}</td>-->
-                <!--                        <td>{{student.date}}</td>-->
-                <!--                    </tr>-->
-                <!--                    {% endfor %}-->
-                <!--                    </tbody>-->
-
-                <!--                </table>-->
-
             </div>
         </div>
+
+
     </div>
-
-
-</div>
 {% endblock %}

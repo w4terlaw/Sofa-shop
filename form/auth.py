@@ -12,7 +12,7 @@ def reg():
         email = request.form['email']
         password = sha256_crypt.encrypt(request.form['password'])
 
-        check_sql = f'''select * from user where email = "{email}"'''
+        check_sql = f'''select * from user where email = '{email}' '''
         account = execute_read_query(check_sql)
 
         if account:
@@ -39,7 +39,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
 
-        check_sql = f'''select * from user where email = "{email}"'''
+        check_sql = f'''select * from user where email = '{email}' '''
         login_user = execute_read_query(check_sql)
         if login_user == tuple():
             msg = 'Неверный никнейм или пароль.'
@@ -59,13 +59,14 @@ def login():
                 session['last_name'] = login_user['last_name']
                 session['nickname'] = login_user['email']
                 session['user_id'] = login_user['id']
+                session['admin'] = login_user['admin']
 
                 check_actual_order = f'''SELECT id FROM orders
                                                     where idUser = {session.get('user_id')} and actual = 1'''
                 actual_order = execute_read_query(check_actual_order)
                 if actual_order != tuple():
                     check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
-                                                            where idOrder="{actual_order[0]['id']}"'''
+                                                            where idOrder='{actual_order[0]['id']}' '''
                     total_count = execute_read_query(check_total_count)[0]['total_count']
                     session['count_product_cart'] = total_count
                 if session.get('request'):
