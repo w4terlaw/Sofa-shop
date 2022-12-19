@@ -8,6 +8,22 @@ app = Flask(__name__)
 app.secret_key = 'XMGriU67zMwuqf7s2lsxlv2cH4QaDGUt'
 app.permanent_session_lifetime = datetime.timedelta(seconds=600)
 
+
+# Connect DB
+def create_connection(host, user, password, db):
+    app.config['MYSQL_HOST'] = host
+    app.config['MYSQL_USER'] = user
+    app.config['MYSQL_PASSWORD'] = password
+    app.config['MYSQL_DB'] = db
+    app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+    print("Connection to MySQL DB successful")
+
+
+# create_connection('localhost', 'root', 'root', 'sofa_shop')
+create_connection('waterlaw1.mysql.pythonanywhere-services.com', 'waterlaw1', 'elmir2022', 'waterlaw1$sofa_shop')
+
+mysql.init_app(app)
+
 # AUTH
 app.add_url_rule('/login', methods=['GET', 'POST'], view_func=auth.login)
 app.add_url_rule('/reg', methods=['GET', 'POST'], view_func=auth.reg)
@@ -35,22 +51,6 @@ app.add_url_rule('/admin_panel', view_func=admin_panel.admin_panel)
 # app.add_url_rule('/admin_panel/redact', view_func=admin_panel.search)
 # app.add_url_rule('/admin_panel/del', view_func=admin_panel.search)
 # app.add_url_rule('/admin_panel/add', view_func=admin_panel.search)
-
-
-# Connect DB
-def create_connection(host, user, password, db):
-    app.config['MYSQL_HOST'] = host
-    app.config['MYSQL_USER'] = user
-    app.config['MYSQL_PASSWORD'] = password
-    app.config['MYSQL_DB'] = db
-    app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-    print("Connection to MySQL DB successful")
-
-
-create_connection('localhost', 'root', 'root', 'sofa_shop')
-# create_connection('waterlaw1.mysql.pythonanywhere-services.com', 'waterlaw1', 'elmir2022','waterlaw1$sofa_shop')
-
-mysql.init_app(app)
 
 
 @app.errorhandler(404)

@@ -52,7 +52,7 @@ def change_count():
     total_price = str(execute_read_query(check_total_price)[0]['total_price']) + ' ₽'
 
     check_total_count = f'''SELECT sum(order_product.count) as total_count FROM order_product 
-                                            where idOrder="{actual_order}"'''
+                                            where idOrder='{actual_order}' '''
     total_count = execute_read_query(check_total_count)[0]['total_count']
     session['count_product_cart'] = total_count
     # session['count_product_cart'] = total_count
@@ -62,8 +62,7 @@ def change_count():
 # DELETE PRODUCT IN CART
 # @app.route("/cart/delete_product/<int:product_id>/<int:color_id>")
 def delete_product(product_id, color_id):
-    check_actual_order = f'''SELECT id FROM orders
-                                    where idUser = {session.get('user_id')} and actual = 1'''
+    check_actual_order = f'''Select id FROM orders where idUser = {session.get('user_id')} and actual = 1'''
     actual_order = execute_read_query(check_actual_order)[0]['id']
 
     delete_product_cart = f'''DELETE FROM `order_product` 
@@ -75,7 +74,7 @@ def delete_product(product_id, color_id):
 
     if empty_order == tuple():
         del session['count_product_cart']
-        drop_order = f'''DELETE FROM `orders` WHERE (`id` = '{actual_order}');'''
+        drop_order = f'''DELETE FROM `orders` WHERE (`id` = '{actual_order}')'''
         execute_query(drop_order)
     return redirect(url_for('cart'))
 
