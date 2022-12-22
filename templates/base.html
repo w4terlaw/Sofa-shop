@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <title>{% block title %}{% endblock %}</title>
@@ -45,29 +45,6 @@
         background: linear-gradient(91.85deg, #ff5863 .1%, #eb212e 101.94%, #eb212e 0);
     }
 
-    .count_cart {
-        display: inline-block;
-        position: relative;
-    }
-
-    .span {
-
-        display: inline-block;
-        background: #ccc;
-        color: #000;
-        text-align: center;
-        border-radius: 50%;
-        padding: 50% 0;
-        width: 100%;
-        position: absolute;
-        transform: translateY(-50%);
-    }
-
-    .text {
-        position: relative;
-        top: -.7em;
-        padding: 0em 0.65em;
-    }
 
     .form_search .fa-search {
         background-color: white;
@@ -107,7 +84,7 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
                     <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-decoration-none">
-                        <div style="color:#001a34;font-size:30px;font-weight: 700;">LAVERY</div>
+                        <div style="color:#001a34;font-size:30px;font-weight: 700;">Lavery</div>
                     </a>
 
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center align-items-center my-md-0 text-small">
@@ -116,7 +93,7 @@
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2.5" stroke-linecap="round"
                                                         stroke-linejoin="round" class="feather feather-search"><circle
-                                cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+                                cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
                             <form action="/search/">
                                 <input type="text" name="text" id="text_search" class="form-control form-input"
                                        value="{{ search_value }}" placeholder="Поиск...">
@@ -130,7 +107,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                          class="bi bi-box-fill" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd"
-                                              d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001 6.971 2.789Zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z"/>
+                                              d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001 6.971 2.789Zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z"></path>
                                     </svg>
                                 </div>
                                 <div style="margin-top: -2px;font-size:14px">Мои заказы</div>
@@ -139,10 +116,12 @@
                         <li>
                             <a style="color:#001a34; position:relative" href="/cart" class="nav-link">
                                 <div style="text-align:center">
+
                                     {% if session.count_product_cart is defined %}
                                         <div class="cont">
-                                            <div id="product_count" class="full_quantity"><p
-                                                    class="v-catalog-full_quantity_count">{{ session.count_product_cart }}</p>
+
+                                            <div id="product_count" class="full_quantity">
+                                                <p class="v-catalog-full_quantity_count">{{ session.count_product_cart }}</p>
                                             </div>
                                         </div>
                                     {% endif %}
@@ -150,7 +129,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                          class="bi bi-bag-fill" viewBox="0 0 16 16">
 
-                                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>
+                                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"></path>
                                     </svg>
                                 </div>
                                 <div style="font-size:14px">Корзина</div>
@@ -159,11 +138,11 @@
                         {% if session.logged_in == true %}
                             <li>
                                 <a href="/exit" style="color:#001a34;" class="nav-link">
-                                    <div style="text-align:center; float:center">
+                                    <div style="text-align:center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27"
                                              fill="currentColor"
                                              class="bi bi-person-fill" viewBox="0 0 16 16">
-                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path>
                                         </svg>
                                         <!--                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"-->
                                         <!--                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"-->
@@ -185,16 +164,16 @@
                             <!--            </div>-->
                             <li>
                                 <a href="/login" style="color:#001a34;" class="nav-link">
-                                    <div style="text-align:center; float:center">
+                                    <div style="text-align:center">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                              viewBox="0 0 24 24"
                                              fill="none"
                                              stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                              stroke-linejoin="round"
                                              class="feather feather-log-in">
-                                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                                            <polyline points="10 17 15 12 10 7"/>
-                                            <line x1="15" y1="12" x2="3" y2="12"/>
+                                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                            <polyline points="10 17 15 12 10 7"></polyline>
+                                            <line x1="15" y1="12" x2="3" y2="12"></line>
                                         </svg>
                                     </div>
                                     <div style="font-size:14px">Войти</div>

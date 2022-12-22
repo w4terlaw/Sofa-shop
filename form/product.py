@@ -6,16 +6,29 @@ from database.extension import execute_read_query, execute_query
 def product_info(id, color_id):
     product_in_order = None
     msg = ''
-    check_info_product = f'''Select *, GROUP_CONCAT(material SEPARATOR ', ') as full_material, product.id as pro_id from type, product, color, product_has_color, product_has_material, material
-                           Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id
-                           and color.id=product_has_color.color_id and product_has_material.material_id = material.id
-                           and product_has_material.product_id = product.id and product.id="{id}" and color_id = "{color_id}"'''
+    # check_info_product = f'''Select *, GROUP_CONCAT(material SEPARATOR ', ') as full_material, product.id as pro_id from type, product, color, product_has_color, product_has_material, material
+    #                        Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id
+    #                        and color.id=product_has_color.color_id and product_has_material.material_id = material.id
+    #                        and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
+    check_info_product = f'''Select *, GROUP_CONCAT(material SEPARATOR ', ') as full_material, product.id as pro_id 
+from type, product, product_has_material, material, color, product_has_color
+Where product.count>0 and type.id=product.type_id and product_has_material.material_id = material.id
+and product.id=product_has_color.product_id
+and color.id=product_has_color.color_id
+and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
     product_data = execute_read_query(check_info_product)
     product_data = product_data[0]
-    check_picture_product = f'''Select product.id, color.id as color_id, picture from type, product, color, product_has_color
+    print(product_data)
+    check_all_picture_product = f'''Select all_picture.picture  from type, product, color, product_has_color, all_picture
+                        Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id
+                        and color.id=product_has_color.color_id and product.id={id} and color_id = {color_id} and all_picture.product_has_color_id = product_has_color.id'''
+    all_picture = execute_read_query(check_all_picture_product)
+    print(all_picture)
+
+    check_picture_product = f'''Select product.id, color.id as color_id, picture, picture2 from type, product, color, product_has_color
                             Where product.id=product_has_color.product_id 
                             and color.id=product_has_color.color_id
-                            and product.id={id}'''
+                            and product.id={id} group by color.id'''
     product_picture = execute_read_query(check_picture_product)
     # print(product_picture)
     if session.get('logged_in'):
@@ -50,5 +63,5 @@ def product_info(id, color_id):
                 total_count = execute_read_query(check_total_count)[0]['total_count']
                 session['count_product_cart'] = total_count
                 msg = 'Товар добавлен в корзину'
-    return render_template('product.html', pro_item=product_data, pro_pic=product_picture, msg=msg, product_in_order=product_in_order,
-                           color_id=color_id)
+    return render_template('product.html', pro_item=product_data, all_picture=all_picture, pro_pic=product_picture,
+                           msg=msg, product_in_order=product_in_order, color_id=color_id)

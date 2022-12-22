@@ -27,7 +27,7 @@
                                         <div class="mb">
                                             <div class="me">
                                                 <a href="/product/{{ pro_cart.id }}/{{ pro_cart.color_id }}">
-                                                    <img style="height: 100%; width: 100%;"
+                                                    <img style=" border-radius: 8px; height: 100%; width: 100%;"
                                                          src="{{ pro_cart.picture }}"
                                                          alt=" ">
                                                 </a>
@@ -216,13 +216,14 @@
         .ln {
             display: flex;
             position: relative;
+            gap: 20px;
         }
 
         .ll .me {
             height: 100%;
-            margin-right: 20px;
-            max-height: 200px;
-            max-width: 200px;
+            {#margin-right: 20px;#}
+            max-height: 300px;
+            max-width: 300px;
             min-height: 200px;
             min-width: 200px;
             width: 100%;
