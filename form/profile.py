@@ -19,7 +19,7 @@ def profile():
                 flash('Пароли не совпадают', category='danger')
                 return redirect('/profile')
             new_password = sha256_crypt.encrypt(new_password)
-            update_password = f'''UPDATE user` SET `password` = '{new_password}' 
+            update_password = f'''UPDATE `user` SET `password` = '{new_password}' 
                                     WHERE (`email` = '{session.get('email')}')'''
             execute_query(update_password)
             flash('Пароль успешно изменён', category='success')
