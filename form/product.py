@@ -11,19 +11,17 @@ def product_info(id, color_id):
     #                        and color.id=product_has_color.color_id and product_has_material.material_id = material.id
     #                        and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
     check_info_product = f'''Select *, GROUP_CONCAT(material SEPARATOR ', ') as full_material, product.id as pro_id 
-from type, product, product_has_material, material, color, product_has_color
-Where product.count>0 and type.id=product.type_id and product_has_material.material_id = material.id
-and product.id=product_has_color.product_id
-and color.id=product_has_color.color_id
-and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
+        from type, product, product_has_material, material, color, product_has_color
+        Where product.count>0 and type.id=product.type_id and product_has_material.material_id = material.id
+        and product.id=product_has_color.product_id
+        and color.id=product_has_color.color_id
+        and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
     product_data = execute_read_query(check_info_product)
     product_data = product_data[0]
-    print(product_data)
     check_all_picture_product = f'''Select all_picture.picture  from type, product, color, product_has_color, all_picture
                         Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id
                         and color.id=product_has_color.color_id and product.id={id} and color_id = {color_id} and all_picture.product_has_color_id = product_has_color.id'''
     all_picture = execute_read_query(check_all_picture_product)
-    print(all_picture)
 
     check_picture_product = f'''Select product.id, color.id as color_id, picture, picture2 from type, product, color, product_has_color
                             Where product.id=product_has_color.product_id 

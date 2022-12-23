@@ -37,7 +37,6 @@ def cart():
                                 and idProduct=product.id and product_id=product.id group by color.id, product.id'''
 
             products_in_cart = execute_read_query(check_products_cart)
-            print(products_in_cart)
             check_total_price = f'''SELECT sum(order_product.count*price) as total_price FROM order_product, product 
                             where idOrder = '{id_actual}' and idProduct=product.id'''
             total_price = str(execute_read_query(check_total_price)[0]['total_price']) + ' ₽'

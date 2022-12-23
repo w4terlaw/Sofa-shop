@@ -8,5 +8,4 @@ def home():
                 FROM product, product_has_color where count>0 
                 and product_has_color.product_id = product.id group by product.title'''
     products = execute_read_query(check_products)
-    print(products)
     return render_template('home.html', products=products)

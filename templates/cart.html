@@ -11,6 +11,7 @@
         }
 
     </script>
+
     <div class="container">
         <div>
             {% if session.logged_in == true %}
@@ -25,8 +26,8 @@
 
                                     <div class="ln">
                                         <div class="mb">
-                                            <div class="me">
-                                                <a href="/product/{{ pro_cart.id }}/{{ pro_cart.color_id }}">
+                                            <div class="me"><a href="">
+                                                <a href="/product/{{ pro_cart.product_id }}/{{ pro_cart.color_id }}">
                                                     <img style=" border-radius: 8px; height: 100%; width: 100%;"
                                                          src="{{ pro_cart.picture }}"
                                                          alt=" ">
@@ -182,6 +183,7 @@
 
         </div>
     </div>
+
 
     <style>
         @media (max-width: 750px) {

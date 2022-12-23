@@ -1107,14 +1107,14 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </table>
     <table id="309" parent="291" name="type">
       <Engine>InnoDB</Engine>
-      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+      <CollationName>utf8mb3_general_ci</CollationName>
     </table>
     <table id="310" parent="291" name="user">
       <Engine>InnoDB</Engine>
       <CollationName>utf8mb3_general_ci</CollationName>
     </table>
     <column id="311" parent="300" name="id">
-      <AutoIncrement>7</AutoIncrement>
+      <AutoIncrement>42</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1258,7 +1258,7 @@ color_id</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="338" parent="304" name="id">
-      <AutoIncrement>188</AutoIncrement>
+      <AutoIncrement>199</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1545,6 +1545,7 @@ material_id</ColNames>
       <DasType>varchar(45)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </column>
     <index id="395" parent="309" name="PRIMARY">
       <ColNames>id</ColNames>
@@ -1557,7 +1558,7 @@ material_id</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="397" parent="310" name="id">
-      <AutoIncrement>5</AutoIncrement>
+      <AutoIncrement>6</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1582,17 +1583,21 @@ material_id</ColNames>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="402" parent="310" name="admin">
-      <DasType>tinyint|0s</DasType>
-      <NotNull>1</NotNull>
+    <column id="402" parent="310" name="address">
+      <DasType>varchar(200)|0s</DasType>
       <Position>6</Position>
     </column>
-    <index id="403" parent="310" name="PRIMARY">
+    <column id="403" parent="310" name="admin">
+      <DasType>tinyint|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+    </column>
+    <index id="404" parent="310" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="404" parent="310" name="PRIMARY">
+    <key id="405" parent="310" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>

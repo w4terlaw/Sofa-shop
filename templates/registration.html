@@ -85,8 +85,16 @@
 <main class="form-signin w-100 m-auto">
     <div class="container">
         <form method="post">
-            <h1 class="h3 mb-3 fw-normal">CEPU-QR</h1>
-            <div class="msg pt-1 pb-3">{{ msg }}</div>
+            <h1 class="h3 mb-3 fw-normal">LAVERY</h1>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="msg pt-2 pb-3">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
             <div class="form-floating pb-2">
                 <input type="text" class="form-control" id="floatingInput" placeholder="Иван" name='first_name'
                        required/>
