@@ -1,4 +1,4 @@
-from flask import render_template, request, session, redirect, url_for, flash
+from flask import render_template, request, session, redirect, flash
 from database.extension import execute_read_query, execute_query
 from passlib.hash import sha256_crypt
 
@@ -10,7 +10,6 @@ def reg():
         last_name = request.form['last_name']
         email = request.form['email']
         password = sha256_crypt.encrypt(request.form['password'])
-
         check_sql = f'''select * from user where email = '{email}' '''
         account = execute_read_query(check_sql)
 
@@ -39,11 +38,13 @@ def login():
 
         check_sql = f'''select * from user where email = '{email}' '''
         login_user = execute_read_query(check_sql)
+        print(password)
         if login_user == tuple():
             flash('Неверный никнейм или пароль.')
             return redirect('/login')
         else:
             login_user = login_user[0]
+            print( login_user['password'])
             if sha256_crypt.verify(password, login_user['password']):
 
                 session['logged_in'] = True
@@ -64,7 +65,7 @@ def login():
                     session['count_product_cart'] = total_count
                 if session.get('request'):
                     return redirect(session.get('request'))
-                return redirect('/home')
+                return redirect('/')
             else:
                 flash('Неверный никнейм или пароль.')
                 return redirect('/login')

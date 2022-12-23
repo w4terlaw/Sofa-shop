@@ -19,7 +19,7 @@ def profile():
                 flash('Пароли не совпадают', category='danger')
                 return redirect('/profile')
             new_password = sha256_crypt.encrypt(new_password)
-            update_password = f'''UPDATE `sofa_shop`.`user` SET `password` = '{new_password}' 
+            update_password = f'''UPDATE user` SET `password` = '{new_password}' 
                                     WHERE (`email` = '{session.get('email')}')'''
             execute_query(update_password)
             flash('Пароль успешно изменён', category='success')
@@ -31,7 +31,7 @@ def profile():
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         address = request.form['address']
-        update_profile_data = f'''UPDATE `sofa_shop`.`user` 
+        update_profile_data = f'''UPDATE `user` 
         SET `first_name` = '{first_name}', `last_name` = '{last_name}', \
          `address` = '{address}' WHERE (`email` = '{session['email']}') '''
         execute_query(update_profile_data)
