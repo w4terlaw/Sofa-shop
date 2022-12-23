@@ -6,6 +6,8 @@ from form import home, cart, search, product, auth, admin_panel, profile
 app = Flask(__name__)
 
 app.secret_key = 'XMGriU67zMwuqf7s2lsxlv2cH4QaDGUt'
+
+
 # app.permanent_session_lifetime = datetime.timedelta(seconds=600)
 
 
@@ -46,13 +48,13 @@ app.add_url_rule('/search/', view_func=search.search)
 # ADMIN PANEL
 app.add_url_rule('/admin', view_func=admin_panel.admin)
 
-
 # app.add_url_rule('/admin/redact', view_func=admin_panel.search)
 # app.add_url_rule('/admin/del/<int:product_id>', view_func=admin_panel.search)
 # app.add_url_rule('/admin/add', view_func=admin_panel.search)
 
 # PROFILE
 app.add_url_rule('/profile', methods=['GET', 'POST'], view_func=profile.profile)
+
 
 @app.errorhandler(404)
 def not_found(error):

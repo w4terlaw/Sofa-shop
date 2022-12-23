@@ -10,7 +10,7 @@ def reg():
         last_name = request.form['last_name']
         email = request.form['email']
         password = sha256_crypt.encrypt(request.form['password'])
-        check_sql = f'''select * from user where email = '{email}' '''
+        check_sql = f'''select * from `user` where email = '{email}' '''
         account = execute_read_query(check_sql)
 
         if account:
@@ -44,7 +44,7 @@ def login():
             return redirect('/login')
         else:
             login_user = login_user[0]
-            print( login_user['password'])
+            print(login_user['password'])
             if sha256_crypt.verify(password, login_user['password']):
 
                 session['logged_in'] = True
