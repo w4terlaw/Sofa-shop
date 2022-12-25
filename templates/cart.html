@@ -19,22 +19,24 @@
                 {% if products_in_cart is defined %}
                     <!--        <div style="color:#001a34; font-size:28px; font-weight: 700;">Корзина</div>-->
 
-                    <div class="cart_pay">
-                        <div>
+                    {#                    <div class="cart_pay">#}
+                    <div class="row">
+                        <div class="col-lg-8">
                             {% for pro_cart in products_in_cart %}
-                                <div class="ll">
 
-                                    <div class="ln">
-                                        <div class="mb">
-                                            <div class="me"><a href="">
+
+                                <div class="card mb-4">
+                                    <div class="card-body">
+
+                                        <div class="ln">
+                                            <div class="mb">
                                                 <a href="/product/{{ pro_cart.product_id }}/{{ pro_cart.color_id }}">
-                                                    <img style=" border-radius: 8px; height: 100%; width: 100%;"
+                                                    <img class="me"
+                                                         style=" border-radius: 8px; height: 100%; width: 100%;"
                                                          src="{{ pro_cart.picture }}"
                                                          alt=" ">
                                                 </a>
                                             </div>
-                                        </div>
-                                        <div style="display: flex">
                                             <div>
                                                 <a style="text-decoration:none;color: #001a34;font-size:18px"
                                                    href="">{{ pro_cart.title }}</a>
@@ -77,18 +79,12 @@
                                                             }
                                                         });
                                                     }
-
-
                                                 </script>
                                                 <br>
 
                                             </div>
                                             <form method="post">
                                                 <div style="position:absolute; right:0; bottom:0">
-                                                    {#                                            <div style="margin-left: auto; margin-right: 0;">#}
-                                                    {#                                                    <a style="color:#FF4747; text-decoration:none;"#}
-                                                    {#                                                       href="{{ url_for('.delete_product', product_id=pro_cart.product_id, color_id=pro_cart.color_id ) }}"></a>#}
-                                                    {#                                                    <button type="button" class="btn btn-sm btn-danger">#}
                                                     <input type="text" name="product_id"
                                                            value="{{ pro_cart.product_id }}" hidden>
                                                     <input type="text" name="color_id" value="{{ pro_cart.color_id }}"
@@ -96,68 +92,69 @@
                                                     <button style="color:#eb212e; display:flex; align-items:center;">
                                                         Удалить
                                                     </button>
-                                                    {##}
-                                                    {#                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"#}
-                                                    {#                                                                                                             fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0#}
-                                                    {#                                                                                                                16 16">#}
-                                                    {#                                                                                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>#}
-                                                    {#                                                                                                        </svg>#}
-
-                                                    {#                                                        </button>#}
-
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-
                                 </div>
 
+
+
                             {% endfor %}
-
                         </div>
-                        <div>
-                            <div style="position: sticky; top: 104px;" class="payment">
 
-                                {#                                <div style="display: flex; justify-content: space-between;">#}
-                                <div style="font-size:20px;font-weight: 600;">Ваша корзина</div>
+                            <div class="col-lg-4">
+                                <div style="position: sticky; top: 108px;">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div>
 
-                                {#                                    <button style="color: #eb212e" title="Очистить корзину">#}
-                                {#                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"#}
-                                {#                                             fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">#}
-                                {#                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>#}
-                                {#                                        </svg>#}
-                                {#                                    </button>#}
-                                {#                                </div>#}
-                                <div id="total_count">Товары ({{ total_count }})</div>
-                                <hr>
-                                <span style="font-size:20px;font-weight: 600; ">Общая стоимость</span>
-                                <span style="font-size:20px;font-weight: 600; display:block; float:right"
-                                      id="total_price">{{ total_price }}
+                                            {#                                <div style="display: flex; justify-content: space-between;">#}
+                                            <div style="font-size:20px;font-weight: 600;">Ваша корзина</div>
+
+                                            {#                                    <button style="color: #eb212e" title="Очистить корзину">#}
+                                            {#                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"#}
+                                            {#                                             fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">#}
+                                            {#                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>#}
+                                            {#                                        </svg>#}
+                                            {#                                    </button>#}
+                                            {#                                </div>#}
+                                            <div id="total_count">Товары ({{ total_count }})</div>
+                                            <hr>
+                                            <span style="font-size:20px;font-weight: 600; ">Общая стоимость</span>
+                                            <span style="font-size:20px;font-weight: 600; display:block; float:right"
+                                                  id="total_price">{{ total_price }}
                                 </span>
-                                <p></p>
-                                <form method="POST">
-                                    <input type="text" name="idOrder" value="{{ products_in_cart[0]['idOrder'] }}"
-                                           hidden>
-                                    <div class="btn-group w-100" role="group">
-                                        <button type="button"
-                                                class="btn btn-primary">
-                                            Перейти к оформлению
-                                        </button>
-                                        <button class="btn btn-danger" title="Очистить корзину">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                                                 fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
-                                            </svg>
-                                        </button>
+                                            <p></p>
+                                            <form method="POST">
+                                                <input type="text" name="idOrder"
+                                                       value="{{ products_in_cart[0]['idOrder'] }}"
+                                                       hidden>
+                                                <div class="btn-group w-100" role="group">
+                                                    <button type="button"
+                                                            class="btn btn-primary">
+                                                        Перейти к оформлению
+                                                    </button>
+                                                    <button class="btn btn-danger" title="Очистить корзину">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                             fill="currentColor" class="bi bi-trash3-fill"
+                                                             viewBox="0 0 16 16">
+                                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </form>
+
+
+                                        </div>
+
                                     </div>
-                                </form>
-
-
+                                </div>
                             </div>
-
                         </div>
-
                     </div>
+
+                    {#                    </div>#}
                 {% else %}
                     <div>
                         <div style="color:#001a34; font-size:28px; font-weight: 700; text-align:center">Корзина пуста
@@ -207,13 +204,6 @@
             text-align: center;
         }
 
-        .ll {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 6px 16px rgb(0 26 52 / 16%), 0 0 0 rgb(0 26 52 / 5%);
-            margin-bottom: 20px;
-            padding: 20px;
-        }
 
         .ln {
             display: flex;
@@ -221,10 +211,9 @@
             gap: 20px;
         }
 
-        .ll .me {
+        .me {
             height: 100%;
-            {#margin-right: 20px;#}
-            max-height: 300px;
+        {#margin-right: 20px;#} max-height: 300px;
             max-width: 300px;
             min-height: 200px;
             min-width: 200px;

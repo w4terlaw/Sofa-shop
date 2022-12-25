@@ -8,21 +8,25 @@ def reg():
     if request.method == 'POST':
         first_name = request.form['first_name']
         last_name = request.form['last_name']
-        email = request.form['email']
-        password = sha256_crypt.encrypt(request.form['password'])
+        email = request.form['email_reg']
+        password = sha256_crypt.encrypt(request.form['password_reg'])
         check_sql = f'''select * from `user` where email = '{email}' '''
         account = execute_read_query(check_sql)
 
         if account:
-            flash('Этот email уже занят.')
+            flash('Этот email уже занят.', category='danger')
+            return redirect('/login')
         elif first_name[0].islower() or last_name[0].islower():
-            flash('Имя и фамилия должны начинаться с заглавных букв.')
-        elif len(request.form['password']) < 8:
-            flash('Пароль должен содержать не менее 8 символов.')
+            flash('Имя и фамилия должны начинаться с заглавных букв.', category='danger')
+            return redirect('/login')
+        elif len(request.form['password_reg']) < 8:
+            flash('Пароль должен содержать не менее 8 символов.', category='danger')
+            return redirect('/login')
         else:
             write_sql = f'''INSERT INTO `user` (`email`, `password`, `first_name`, `last_name`, `address`,`admin`) 
             VALUES ('{email}', '{password}', '{first_name}', '{last_name}', '', 0)'''
             execute_query(write_sql)
+            flash('Аккаунт создан.', category='success')
             return redirect('/login')
     return render_template('registration.html')
 
@@ -40,7 +44,7 @@ def login():
         login_user = execute_read_query(check_sql)
         print(password)
         if login_user == tuple():
-            flash('Неверный никнейм или пароль.')
+            flash('Неверный никнейм или пароль.', category='danger')
             return redirect('/login')
         else:
             login_user = login_user[0]
@@ -67,7 +71,7 @@ def login():
                     return redirect(session.get('request'))
                 return redirect('/')
             else:
-                flash('Неверный никнейм или пароль.')
+                flash('Неверный никнейм или пароль.', category='danger')
                 return redirect('/login')
     return render_template('login.html')
 

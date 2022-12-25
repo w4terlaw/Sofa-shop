@@ -1,9 +1,175 @@
 {% extends "base.html" %}
 
 {% block title %}
-Админ
+    Админ
 {% endblock %}
-
+ALTER TABLE all_picture AUTO_INCREMENT = 1;
+ALTER TABLE color AUTO_INCREMENT = 1;
+ALTER TABLE material AUTO_INCREMENT = 1;
+ALTER TABLE order_product AUTO_INCREMENT = 1;
+ALTER TABLE orders AUTO_INCREMENT = 1;
+ALTER TABLE payment AUTO_INCREMENT = 1;
+ALTER TABLE product AUTO_INCREMENT = 1;
+ALTER TABLE product_has_color AUTO_INCREMENT = 1;
+ALTER TABLE product_has_material AUTO_INCREMENT = 1;
+ALTER TABLE type AUTO_INCREMENT = 1;
+ALTER TABLE user AUTO_INCREMENT = 1;
 {% block body %}
+    <div class="container 'py-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <li class="alert alert-{{ category }}">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h4 class="text-center">Добавление нового товара</h4>
+        <p></p>
+        <form method="post">
+            <div class="row">
 
+                <div class="col-lg-4">
+                    <span class="text-center">Данные товары</span>
+                    <p></p>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="title" required>
+                        <label>Название</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <select class="form-select" name="type">
+                            <option value="1">Диван</option>
+                        </select>
+                        <label>Тип</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <textarea class="form-control" name="description" required></textarea>
+                        <label for="exampleTextarea">Описание</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <input type="number" class="form-control" name="price" required>
+                        <label>Цена</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <select class="form-select" name="country">
+                            <option value="Китай">Китай</option>
+                            <option value="Россия">Россия</option>
+                            <option value="Украина">Украина</option>
+                        </select>
+                        <label>Страна</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <input type="number" class="form-control" name="weight" required>
+                        <label>Вес</label>
+                    </div>
+                    <p></p>
+                </div>
+                <div class="col-lg-4">
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label>Общие размеры</label>
+                            <p></p>
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="overall_h" required>
+                                <label>Высота</label>
+                            </div>
+                            <p></p>
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="overall_w" required>
+                                <label>Ширина</label>
+                            </div>
+                            <p></p>
+
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="overall_d" required>
+                                <label>Глубина</label>
+                            </div>
+                            <p></p>
+                        </div>
+                        <div class="col-lg-6">
+                            <label>Размеры сиденья</label>
+                            <p></p>
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="seat_h" required>
+                                <label>Высота сиденья</label>
+                            </div>
+                            <p></p>
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="seat_w" required>
+                                <label>Ширина сиденья</label>
+                            </div>
+                            <p></p>
+
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="seat_d" required>
+                                <label>Глубина сиденья</label>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+
+                    <span>Материал</span>
+                    <p></p>
+                    <select name="material" size="8" class="form-select" multiple aria-label="multiple select example">
+                        {% for material in material %}
+                            <option value="{{ material.id }}" name="material">{{ material.material }} </option>
+                        {% endfor %}
+                    </select>
+                    <p></p>
+                </div>
+
+                <div class="col-lg-4">
+                    <span class="text-center">Изображения товара</span>
+                    <p></p>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="picture" required>
+                        <label>Превью товара</label>
+                    </div>
+                    <p></p>
+                    <div class="form-floating">
+
+                        <select class="form-select" name="color">
+
+                            {% for color in color %}
+                                <option data-tokens="{{ color.color }}" name="{{ color.id }}"
+                                        value="{{ color.id }}">{{ color.color }}</option>
+                            {% endfor %}
+                            <h1>afa</h1>
+                        </select>
+                        <label>Цвет</label>
+                    </div>
+                    <p></p>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="picture2" required>
+                        <label>Превью цвета товара</label>
+                    </div>
+                    <p></p>
+                    <div class="form-floating">
+                        <textarea class="form-control" name="all_picture" required></textarea>
+                        <label for="exampleTextarea">Изображения товара </label>
+                    </div>
+                    <p></p>
+                    <button type="submit" class="btn btn-primary w-100">Добавить товар</button>
+
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}
