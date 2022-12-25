@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block body %}
+
     <script>
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
 
     </script>
-
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <div class="container">
         <div>
             {% if session.logged_in == true %}
