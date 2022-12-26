@@ -62,7 +62,6 @@ def change_count():
     product_id = request.args.get('product_id')
     color_id = request.args.get('color_id')
     product_count = request.args.get('pro_count')
-
     update_count_product = f'''UPDATE order_product SET `count` = '{product_count}'
     WHERE (`idOrder` = '{actual_order}') and (`idProduct` = '{product_id}') and (`color_id` = '{color_id}');'''
     execute_query(update_count_product)
@@ -75,6 +74,7 @@ def change_count():
                                             where idOrder='{actual_order}' '''
     total_count = execute_read_query(check_total_count)[0]['total_count']
     session['count_product_cart'] = total_count
+
     # session['count_product_cart'] = total_count
     return json.dumps({'total_price': total_price, 'total_count': total_count})
 

@@ -12,7 +12,7 @@
         }
 
     </script>
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <div class="container">
         <div>
             {% if session.logged_in == true %}
@@ -49,7 +49,8 @@
                                                 <div style="font-size:26px;font-weight: 600;">{{ pro_cart.price }} ₽
                                                 </div>
                                                 <span>Количество:</span>
-                                                <input id="{{ pro_cart.product_id }}" onchange="change_count(this)"
+                                                <input id="{{ pro_cart.product_id }}"
+                                                       onchange="if (this.value < 1) this.value = 1;if (this.value > 20) this.value = 20;change_count(this)"
                                                        style="width:95.5px"
                                                        type="number" min="1" max="20"
                                                        class="form-control" name="{{ pro_cart.color_id }}"
@@ -62,13 +63,17 @@
                                                         $.ajax({
                                                             type: "GET",
                                                             url: "{{ url_for('change_count') }}",
+
                                                             <!--                                    contentType: 'application/json',-->
                                                             data: {
+
                                                                 product_id: sel.id,
                                                                 color_id: sel.name,
                                                                 pro_count: sel.value
                                                             },
+
                                                             success: function (response) {
+
                                                                 var json = jQuery.parseJSON(response)
                                                                 $('#total_price').html(json.total_price)
                                                                 $('#total_count').html('Товары (' + json.total_count + ')')
@@ -104,8 +109,8 @@
                             {% endfor %}
                         </div>
 
-                            <div class="col-lg-4">
-                                <div style="position: sticky; top: 91px;">
+                        <div class="col-lg-4">
+                            <div style="position: sticky; top: 91px;">
                                 <div class="card mb-4">
                                     <div class="card-body">
                                         <div>
