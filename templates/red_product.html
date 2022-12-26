@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Админ
+{% endblock %}
+ALTER TABLE all_picture AUTO_INCREMENT = 1;
+ALTER TABLE color AUTO_INCREMENT = 1;
+ALTER TABLE material AUTO_INCREMENT = 1;
+ALTER TABLE order_product AUTO_INCREMENT = 1;
+ALTER TABLE orders AUTO_INCREMENT = 1;
+ALTER TABLE payment AUTO_INCREMENT = 1;
+ALTER TABLE product AUTO_INCREMENT = 1;
+ALTER TABLE product_has_color AUTO_INCREMENT = 1;
+ALTER TABLE product_has_material AUTO_INCREMENT = 1;
+ALTER TABLE type AUTO_INCREMENT = 1;
+ALTER TABLE user AUTO_INCREMENT = 1;
+{% block body %}
+    <div class="container 'py-5">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <li class="alert alert-{{ category }}">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h4 class="text-center">Редактирование товара</h4>
+        <p></p>
+        <form method="post">
+            <div class="row">
+
+                <div class="col-lg-5">
+                    <span class="text-center">Данные товары</span>
+                    <p></p>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="title" value="{{ product.title }}" required>
+                        <label>Название</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <select class="form-select" name="type">
+                            <option value="1">Диван</option>
+                        </select>
+                        <label>Тип</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <textarea class="form-control" name="description" required>{{ product.description }}</textarea>
+                        <label for="exampleTextarea">Описание</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <input type="number" value="{{ product.price }}" class="form-control" name="price" required>
+                        <label>Цена</label>
+                    </div>
+
+                    <p></p>
+
+                    <div class="form-floating">
+                        <select class="form-select" name="country">
+                            <option value="Китай">Китай</option>
+                            <option value="Россия">Россия</option>
+                            <option value="Украина">Украина</option>
+                        </select>
+                        <label>Страна</label>
+                    </div>
+
+                    <p></p>
+
+
+                </div>
+                <div class="col-lg-5">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>Общие размеры</label>
+                            <p></p>
+                            <div class="form-floating">
+                                <input type="number" class="form-control" value="{{ product.weight }}" name="weight"
+                                       required>
+                                <label>Вес</label>
+                            </div>
+                            <p></p>
+
+                            <p></p>
+                            <div class="form-floating">
+                                <input type="text" class="form-control" value="{{ product.overall }}" name="overall"
+                                       required>
+                                <label>Общие размеры</label>
+                            </div>
+                            <p></p>
+                            <div class="form-floating">
+                                <input type="text" class="form-control" value="{{ product.seat }}" name="seat"
+                                       required>
+                                <label>Размеры сиденья</label>
+                            </div>
+                            <p></p>
+                        </div>
+
+                    </div>
+                    <span>Материал</span>
+                    <p></p>
+                    <select name="material" size="4" class="form-select" multiple aria-label="multiple select example">
+                        {% for material in material %}
+                            <option value="{{ material.id }}"
+                                    {% for act_mat in act_material %}{% if material.id == act_mat['material_id'] %}
+                                    selected {% endif %}{% endfor %}
+                                    name="material">{{ material.material }} </option>
+                        {% endfor %}
+                    </select>
+                    <p></p>
+                </div>
+                <div class="col-lg-2">
+                    <label>Цвета</label>
+                    <p></p>
+
+                    {% for item_pic in pro_pic %}
+                        <div class="d-flex">
+                            <a href="/product/{{ product.id }}/{{ item_pic.color_id }}">
+                            <div style="display: flex; width:70px; height:70px;">
+                                <img style="border: 2px solid #cccccc; border-radius: 8px; width:70px;"
+                                     src="{{ item_pic.picture2 }}"
+                                     alt=" ">
+                            </div>
+                                </a>
+                            <a href="/del_color/{{ product.id }}/{{ item_pic.color_id }}">
+                                <button type="button" name="del" class="btn btn-danger px-2 m-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"></path>
+                                    </svg>
+                                </button>
+                            </a>
+                            {#                            </a>#}
+                        </div>
+                        <h1></h1>
+                    {% endfor %}
+                    <button type="button" class="btn btn-secondary px-2 m-3" data-bs-toggle="modal"
+                            data-bs-target="#AddColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                             class="bi bi-plus-lg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+
+            </div>
+            <button type="submit" class="btn btn-primary px-3">Сохранить изменения</button>
+        </form>
+    </div>
+    <div class="modal fade" id="AddColor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Добавить новый цвет</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/add_color/{{ product.id }}" method="post">
+                            <div class="">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="picture" required>
+                                    <label>Превью товара</label>
+                                </div>
+                                <p></p>
+                                <div class="form-floating">
+                                    <select class="form-select" name="color">
+                                        {% for color in all_color %}
+                                        <option  data-tokens="{{color.color}}" name="{{color.color}}" value="{{color.id}}">{{color.color}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label>Цвет</label>
+                                </div>
+                                <p></p>
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" name="picture2" required>
+                                    <label>Превью цвета товара</label>
+                                </div>
+                                <p></p>
+                                <div class="form-floating">
+                                    <textarea class="form-control" name="all_picture" required></textarea>
+                                    <label for="exampleTextarea">Изображения товара </label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-success">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+{% endblock %}

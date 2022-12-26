@@ -49,7 +49,11 @@ app.add_url_rule('/search/', view_func=search.search)
 
 # ADMIN PANEL
 app.add_url_rule('/admin', methods=['GET', 'POST'], view_func=admin.admin)
-
+app.add_url_rule('/admin/add_product', methods=['GET', 'POST'], view_func=admin.add_product)
+app.add_url_rule('/admin/red_product/<int:id>', methods=['GET', 'POST'], view_func=admin.red_product)
+app.add_url_rule('/admin/del_product/<int:id>', methods=['GET', 'POST'], view_func=admin.del_product)
+app.add_url_rule('/del_color/<int:id>/<int:color_id>', methods=['GET', 'POST'], view_func=admin.del_color)
+app.add_url_rule('/add_color/<int:id>', methods=['GET', 'POST'], view_func=admin.add_color)
 # app.add_url_rule('/admin/redact', view_func=admin_panel.search)
 # app.add_url_rule('/admin/del/<int:product_id>', view_func=admin_panel.search)
 # app.add_url_rule('/admin/add', view_func=admin_panel.search)

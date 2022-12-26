@@ -1,4 +1,4 @@
-from flask import render_template, request, session, redirect, url_for
+from flask import render_template, request, session, redirect, url_for, flash
 from database.extension import execute_read_query, execute_query
 
 
@@ -12,7 +12,6 @@ def product_info(id, color_id):
         and color.id=product_has_color.color_id
         and product_has_material.product_id = product.id and product.id={id} and color_id = {color_id}'''
     product_data = execute_read_query(check_info_product)
-    print(product_data)
     product_data = product_data[0]
     check_all_picture_product = f'''Select all_picture.picture  from type, product, color, product_has_color, all_picture
                         Where product.count>0 and type.id=product.type_id and product.id=product_has_color.product_id
@@ -58,3 +57,4 @@ def product_info(id, color_id):
                 return redirect(url_for('.product_info', id=id, color_id=color_id))
     return render_template('product.html', pro_item=product_data, all_picture=all_picture, pro_pic=product_picture,
                            product_in_order=product_in_order, color_id=color_id)
+
