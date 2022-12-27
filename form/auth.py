@@ -12,23 +12,23 @@ def reg():
         password = sha256_crypt.encrypt(request.form['password_reg'])
         check_sql = f'''select * from `user` where email = '{email}' '''
         account = execute_read_query(check_sql)
-
+        status = True
         if account:
-            flash('Этот email уже занят.', category='danger')
-            return redirect('/login')
-        elif first_name[0].islower() or last_name[0].islower():
-            flash('Имя и фамилия должны начинаться с заглавных букв.', category='danger')
-            return redirect('/login')
-        elif len(request.form['password_reg']) < 8:
-            flash('Пароль должен содержать не менее 8 символов.', category='danger')
-            return redirect('/login')
-        else:
+            status = False
+            flash('Этот email уже занят.', category='warning')
+        if first_name[0].islower() or last_name[0].islower():
+            status = False
+            flash('Имя и фамилия должны начинаться с заглавных букв.', category='warning')
+        if len(request.form['password_reg']) < 8:
+            status = False
+            flash('Пароль должен содержать не менее 8 символов.', category='warning')
+        if status:
             write_sql = f'''INSERT INTO `user` (`email`, `password`, `first_name`, `last_name`, `address`,`admin`) 
             VALUES ('{email}', '{password}', '{first_name}', '{last_name}', '', 0)'''
             execute_query(write_sql)
             flash('Аккаунт создан.', category='success')
             return redirect('/login')
-    return render_template('registration.html')
+    return redirect('/login')
 
 
 # LOGIN
@@ -73,7 +73,8 @@ def login():
             else:
                 flash('Неверный никнейм или пароль.', category='danger')
                 return redirect('/login')
-    return render_template('login.html')
+
+    return render_template('auth.html')
 
 
 # ACCOUNT LOGOUT

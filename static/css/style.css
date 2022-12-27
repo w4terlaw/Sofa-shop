@@ -97,7 +97,7 @@ input::placeholder {
 /*}*/
 
 .main {
-    min-height: calc(100vh - 230px);
+    min-height: calc(100vh - 220px);
 }
 
 footer {

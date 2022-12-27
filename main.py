@@ -42,7 +42,8 @@ app.add_url_rule('/product/<int:id>/<int:color_id>', methods=['GET', 'POST'], vi
 # CART
 app.add_url_rule('/cart', methods=['GET', 'POST'], view_func=cart.cart)
 app.add_url_rule('/change_count', view_func=cart.change_count)
-app.add_url_rule('/cart_clear', view_func=cart.cart_clear)
+app.add_url_rule('/cart_clear/<int:id>', methods=['GET', 'POST'], view_func=cart.cart_clear)
+app.add_url_rule('/cart/payment/<int:id>', methods=['GET', 'POST'], view_func=cart.cart_payment)
 
 # SEARCH
 app.add_url_rule('/search/', view_func=search.search)

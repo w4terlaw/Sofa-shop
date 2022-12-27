@@ -1,5 +1,5 @@
+from flask import render_template, request, redirect, session, json, flash
 from database.extension import execute_read_query, execute_query
-from flask import render_template, request, redirect, url_for, session, json
 
 
 # PRODUCTS CART
@@ -25,12 +25,6 @@ def cart():
                         del session['count_product_cart']
                         execute_query(f'''DELETE FROM `orders` WHERE (`id` = '{id_actual}')''')
                         return redirect('/cart')
-                if request.form.get('idOrder'):
-                    del session['count_product_cart']
-                    execute_query(f'''DELETE FROM `orders` WHERE (`id` = '{request.form['idOrder']}')''')
-                    return redirect('/cart')
-
-                # return redirect(url_for('cart'))
             check_products_cart = f'''SELECT * FROM order_product, product_has_color, product, color
                                 Where idOrder = {id_actual} 
                                 and order_product.color_id = color.id and product_has_color.color_id = color.id 
@@ -81,5 +75,16 @@ def change_count():
 
 # CLEAR CART
 # @app.route('/cart_clear')
-def cart_clear():
-    pass
+def cart_clear(id):
+    del session['count_product_cart']
+    execute_query(f'''DELETE FROM `orders` WHERE (`id` = '{id}')''')
+    flash('Корзина была очищена', category='info')
+    return redirect('/cart')
+
+
+# PAYMENT CART
+def cart_payment(id):
+    del session['count_product_cart']
+    execute_query(f'''DELETE FROM `orders` WHERE (`id` = '{id}')''')
+    flash('Заказ оформлен и оплачен', category='success')
+    return redirect('/cart')
