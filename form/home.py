@@ -1,4 +1,4 @@
-from flask import render_template, session
+from flask import render_template
 from database.extension import execute_read_query
 
 
@@ -9,3 +9,8 @@ def home():
                 and product_has_color.product_id = product.id group by product.title'''
     products = execute_read_query(check_products)
     return render_template('home.html', products=products)
+
+
+# ABOUT
+def about():
+    return render_template('about.html')

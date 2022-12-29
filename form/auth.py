@@ -33,7 +33,6 @@ def reg():
 
 # LOGIN
 def login():
-    # print(request.url_root + 'login')
     if (request.referrer != request.url_root + 'login') and (request.referrer != request.url_root + 'reg'):
         session['request'] = request.referrer
     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:

@@ -62,6 +62,9 @@ app.add_url_rule('/add_color/<int:id>', methods=['GET', 'POST'], view_func=admin
 # PROFILE
 app.add_url_rule('/profile', methods=['GET', 'POST'], view_func=profile.profile)
 
+# ABOUT
+app.add_url_rule('/about', view_func=home.about)
+
 
 @app.errorhandler(404)
 def not_found(error):
